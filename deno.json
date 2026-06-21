@@ -1,0 +1,31 @@
+{
+  "name": "@dldc/auth-portal",
+  "exports": "./main.tsx",
+  "version": "0.1.0",
+  "tasks": {
+    "bump": "deno run -A jsr:@mys/bump@1",
+    "deps:outdated": "deno outdated",
+    "deps:update": "deno outdated --update --latest --interactive",
+    "check": "deno fmt --check . && deno lint . && deno check .",
+    "start": "deno run --allow-net --allow-env main.tsx",
+    "dev": "deno run -A --watch main.tsx -- --config .data/config.json",
+    "test:run": "deno test -A"
+  },
+  "imports": {
+    "@dldc/hono-ui": "jsr:@dldc/hono-ui@^2.3.4",
+    "@hono/hono": "jsr:@hono/hono@^4.12.26",
+    "@hono/standard-validator": "jsr:@hono/standard-validator@^0.2.2",
+    "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
+    "@std/cli": "jsr:@std/cli@^1.0.30",
+    "@std/expect": "jsr:@std/expect@^1.0.19",
+    "@std/fs": "jsr:@std/fs@^1.0.24",
+    "@std/path": "jsr:@std/path@^1.1.5",
+    "@valibot/valibot": "jsr:@valibot/valibot@^1.4.1",
+    "hono": "jsr:@hono/hono@^4.12.26",
+    "lucide-static": "npm:lucide-static@^1.21.0"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx"
+  }
+}

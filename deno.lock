@@ -1,0 +1,127 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@dldc/css-builder@^1.6.0": "1.6.0",
+    "jsr:@dldc/hono-ui@^2.3.4": "2.3.4",
+    "jsr:@hono/hono@^4.12.21": "4.12.26",
+    "jsr:@hono/hono@^4.12.26": "4.12.26",
+    "jsr:@hono/hono@^4.8.3": "4.12.26",
+    "jsr:@hono/standard-validator@~0.2.2": "0.2.2",
+    "jsr:@standard-schema/spec@1": "1.1.0",
+    "jsr:@std/assert@^1.0.19": "1.0.19",
+    "jsr:@std/cli@^1.0.30": "1.0.30",
+    "jsr:@std/expect@^1.0.19": "1.0.19",
+    "jsr:@std/fmt@^1.0.10": "1.0.10",
+    "jsr:@std/fs@^1.0.24": "1.0.24",
+    "jsr:@std/internal@^1.0.12": "1.0.14",
+    "jsr:@std/internal@^1.0.13": "1.0.14",
+    "jsr:@std/internal@^1.0.14": "1.0.14",
+    "jsr:@std/path@^1.1.4": "1.1.5",
+    "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@valibot/valibot@^1.4.1": "1.4.1",
+    "npm:@opentelemetry/api@^1.9.1": "1.9.1",
+    "npm:lucide-static@^1.21.0": "1.21.0",
+    "npm:type-fest@^5.6.0": "5.7.0"
+  },
+  "jsr": {
+    "@dldc/css-builder@1.6.0": {
+      "integrity": "cae89cec79a7d2da3d988c993b83153906584f21bb5b6df6f8ff9a7f6ef1ef79"
+    },
+    "@dldc/hono-ui@2.3.4": {
+      "integrity": "a735defb8883f6642d6d1a1c8d4b32a6c83a65cdedb6a2cc7f685f39394354e9",
+      "dependencies": [
+        "jsr:@dldc/css-builder",
+        "jsr:@dldc/hono-ui",
+        "jsr:@hono/hono@^4.12.21",
+        "npm:type-fest"
+      ]
+    },
+    "@hono/hono@4.12.26": {
+      "integrity": "f473c70caaa2bb4aad40354195aef58a58c685692d701e1349d1abbf08da22bd"
+    },
+    "@hono/standard-validator@0.2.2": {
+      "integrity": "bc94e1ab41d677a571cb6dd5012823f1162b9856ca24dfd60233734824bb0b0c",
+      "dependencies": [
+        "jsr:@hono/hono@^4.8.3",
+        "jsr:@standard-schema/spec"
+      ]
+    },
+    "@standard-schema/spec@1.1.0": {
+      "integrity": "2ccd54513cd9c960bd155ab569b1a901bc99c6f9ad29559d3f38a28c91c1822d"
+    },
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.12"
+      ]
+    },
+    "@std/cli@1.0.30": {
+      "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13",
+      "dependencies": [
+        "jsr:@std/fmt",
+        "jsr:@std/internal@^1.0.14"
+      ]
+    },
+    "@std/expect@1.0.19": {
+      "integrity": "25271785688c7ff902fa54875d6aa4001f552c5578f7f0fefb5b5aac1fc2ed8a",
+      "dependencies": [
+        "jsr:@std/assert",
+        "jsr:@std/internal@^1.0.13",
+        "jsr:@std/path@^1.1.4"
+      ]
+    },
+    "@std/fmt@1.0.10": {
+      "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
+    },
+    "@std/fs@1.0.24": {
+      "integrity": "f3061b45b81673a2bece689da041df32d174be064c89eb6397fb5718d3fb7877",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.14",
+        "jsr:@std/path@^1.1.5"
+      ]
+    },
+    "@std/internal@1.0.14": {
+      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
+    },
+    "@std/path@1.1.5": {
+      "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.14"
+      ]
+    },
+    "@valibot/valibot@1.4.1": {
+      "integrity": "9be12a3f73f3fd00fa44ae189bc1bb3ab4d9088ec2e32a6ab370ae4fca29ee6e"
+    }
+  },
+  "npm": {
+    "@opentelemetry/api@1.9.1": {
+      "integrity": "sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q=="
+    },
+    "lucide-static@1.21.0": {
+      "integrity": "sha512-6248z2/4sEyKkYAPPUYxOPiB2RCfMmLdMHuoOhsTFnoD40ixAoHmTVhOPux8ADa1NTBmzpEKF7WNePm+Ms503Q=="
+    },
+    "tagged-tag@1.0.0": {
+      "integrity": "sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng=="
+    },
+    "type-fest@5.7.0": {
+      "integrity": "sha512-1URUxUqfHFM1c+zfSPsa3gnkO7Aq21qyH75SIduNYz4SzY964rn1X2vCMQaHSHhktiw+0kPa2iyb6PUpXqB6Vg==",
+      "dependencies": [
+        "tagged-tag"
+      ]
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@dldc/hono-ui@^2.3.4",
+      "jsr:@hono/hono@^4.12.26",
+      "jsr:@hono/standard-validator@~0.2.2",
+      "jsr:@std/cli@^1.0.30",
+      "jsr:@std/expect@^1.0.19",
+      "jsr:@std/fs@^1.0.24",
+      "jsr:@std/path@^1.1.5",
+      "jsr:@valibot/valibot@^1.4.1",
+      "npm:@opentelemetry/api@^1.9.1",
+      "npm:lucide-static@^1.21.0"
+    ]
+  }
+}
