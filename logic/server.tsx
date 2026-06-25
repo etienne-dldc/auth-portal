@@ -1,7 +1,7 @@
+import { Hono } from "@hono/hono";
+import { serveStatic } from "@hono/hono/deno";
+import { routePath } from "@hono/hono/route";
 import { SpanStatusCode, trace } from "@opentelemetry/api";
-import { Hono } from "hono";
-import { serveStatic } from "hono/deno";
-import { routePath } from "hono/route";
 import console from "node:console";
 import { ErrorPage } from "../views/ErrorPage.tsx";
 import { NotFoundPage } from "../views/NotFoundPage.tsx";

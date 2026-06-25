@@ -8,7 +8,7 @@
     "deps:update": "deno outdated --update --latest --interactive",
     "check": "deno fmt --check . && deno lint . && deno check .",
     "start": "deno run --allow-net --allow-env main.tsx",
-    "dev": "deno run -A --watch main.tsx -- --config .data/config.json",
+    "dev": "deno run -A --watch main.tsx -- --config .data/config.yml",
     "test:run": "deno test -A"
   },
   "imports": {
@@ -20,12 +20,12 @@
     "@std/expect": "jsr:@std/expect@^1.0.19",
     "@std/fs": "jsr:@std/fs@^1.0.24",
     "@std/path": "jsr:@std/path@^1.1.5",
+    "@std/yaml": "jsr:@std/yaml@^1.1.1",
     "@valibot/valibot": "jsr:@valibot/valibot@^1.4.1",
-    "hono": "jsr:@hono/hono@^4.12.26",
     "lucide-static": "npm:lucide-static@^1.21.0"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "@hono/hono/jsx"
   }
 }

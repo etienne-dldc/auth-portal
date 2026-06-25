@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@hono/hono";
 
 export function redirectTo(path: string): Response {
   return new Response(null, {

@@ -1,5 +1,5 @@
 import { css, Link, Paper } from "@dldc/hono-ui";
-import type { FC } from "hono/jsx";
+import type { FC } from "@hono/hono/jsx";
 import { Layout } from "../components/Layout.tsx";
 
 const titleClass = css({

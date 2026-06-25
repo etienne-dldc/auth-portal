@@ -1,5 +1,5 @@
 import { css, Html, Title, UniversalLayout } from "@dldc/hono-ui";
-import { type Child, Fragment } from "hono/jsx";
+import { type Child, Fragment } from "@hono/hono/jsx";
 
 type LayoutProps = {
   title?: string;

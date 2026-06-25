@@ -18,6 +18,7 @@
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@^1.1.4": "1.1.5",
     "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@std/yaml@^1.1.1": "1.1.1",
     "jsr:@valibot/valibot@^1.4.1": "1.4.1",
     "npm:@opentelemetry/api@^1.9.1": "1.9.1",
     "npm:lucide-static@^1.21.0": "1.21.0",
@@ -89,6 +90,9 @@
         "jsr:@std/internal@^1.0.14"
       ]
     },
+    "@std/yaml@1.1.1": {
+      "integrity": "a57665ecf3d17b926380593a56625d8a10cc7281802f1e993b5ebc94a48e71f8"
+    },
     "@valibot/valibot@1.4.1": {
       "integrity": "9be12a3f73f3fd00fa44ae189bc1bb3ab4d9088ec2e32a6ab370ae4fca29ee6e"
     }
@@ -119,6 +123,7 @@
       "jsr:@std/expect@^1.0.19",
       "jsr:@std/fs@^1.0.24",
       "jsr:@std/path@^1.1.5",
+      "jsr:@std/yaml@^1.1.1",
       "jsr:@valibot/valibot@^1.4.1",
       "npm:@opentelemetry/api@^1.9.1",
       "npm:lucide-static@^1.21.0"
