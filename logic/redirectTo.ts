@@ -1,6 +1,4 @@
 import type { Context } from "hono";
-import { setCookie } from "hono/cookie";
-import { FLASH_COOKIE_NAME, serializeFlash } from "./flash.ts";
 
 export function redirectTo(path: string): Response {
   return new Response(null, {
@@ -13,16 +11,6 @@ export function redirectTo(path: string): Response {
 
 export function redirect(c: Context, path: string): Response {
   const isHtmx = c.req.header("HX-Request") === "true";
-
-  // Persist flash cookie for both HTMX and standard redirects
-  const flash = c.get("flash");
-  if (flash) {
-    setCookie(c, FLASH_COOKIE_NAME, serializeFlash(flash), {
-      path: "/",
-      sameSite: "Lax",
-      maxAge: 3600,
-    });
-  }
 
   if (isHtmx) {
     // HTMX redirect: return 204 with HX-Redirect header

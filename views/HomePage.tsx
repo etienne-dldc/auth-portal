@@ -1,14 +1,9 @@
 import { Paper } from "@dldc/hono-ui";
 import { Layout } from "../components/Layout.tsx";
-import type { Flash } from "../logic/flash.ts";
 
-type AppsPageProps = {
-  flash?: Flash;
-};
-
-export const HomePage = ({ flash }: AppsPageProps) => {
+export const HomePage = () => {
   return (
-    <Layout title="Apps" flash={flash}>
+    <Layout title="Apps">
       <Paper
         gap={4}
         flexDirection="column"
