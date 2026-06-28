@@ -5,6 +5,7 @@ import console from "node:console";
 import { ErrorPage } from "../views/ErrorPage.tsx";
 import { NotFoundPage } from "../views/NotFoundPage.tsx";
 import { createApp } from "./factory.ts";
+import { check } from "./handlers/check.tsx";
 import { home } from "./handlers/home.tsx";
 import { login } from "./handlers/login.tsx";
 import { logout } from "./handlers/logout.tsx";
@@ -58,7 +59,8 @@ export function createServer() {
   app.use(ROUTES.home.path, ...home);
   app.use(ROUTES.login.path, ...login);
   app.use(ROUTES.logout.path, ...logout);
-  app.use(ROUTES.check.path, ...sso);
+  app.use(ROUTES.sso.path, ...sso);
+  app.use(ROUTES.check.path, ...check);
   app.use(ROUTES.oauthStart.path, ...oauthStart);
   app.use(ROUTES.oauthCallback.path, ...oauthCallback);
 
