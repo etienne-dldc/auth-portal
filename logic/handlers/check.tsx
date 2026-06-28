@@ -23,22 +23,41 @@ export const check = createPathHandler(ROUTES.check.path)(
     const basicAuthCredentials = authorization
       ? parseBasicAuthHeader(authorization)
       : null;
+
     if (basicAuthCredentials) {
+      console.debug(
+        `Basic auth credentials found for user ${basicAuthCredentials.username}, verifying...`,
+      );
       const { username, password } = basicAuthCredentials;
       const isValid = await System.get().verifyBasicAuth(username, password);
-      if (!isValid) {
+      if (isValid) {
+        console.debug(
+          `Basic auth credentials for user ${username} are valid, allowing connection`,
+        );
         return allowConnection(c, username);
       }
+      console.debug(
+        `Basic auth credentials for user ${username} are invalid, continuing...`,
+      );
     }
 
     const ssoSession = token ? db.ssoSessions.findByToken(token) : null;
     if (ssoSession) {
+      console.debug(
+        `SSO session found for user ${ssoSession.username}, checking expiration...`,
+      );
       const ssoSessionExpired = Temporal.Now.instant().epochMilliseconds >
         ssoSession.expiresAt.epochMilliseconds;
       if (ssoSessionExpired) {
+        console.debug(
+          `SSO session for user ${ssoSession.username} is expired, redirecting to SSO with redirect query param`,
+        );
         // Token is expired, try again
         return c.redirect(ssoRedirect);
       }
+      console.debug(
+        `SSO session for user ${ssoSession.username} is valid, allowing connection and removing SSO session`,
+      );
       // Check was hit with a valid SSO token, remove the SSO session and return a redirect with session cookie set
       // Since we are returning a non-200 response, this redirect will be forwarded to the client, and the client will follow the redirect and set the session cookie
       db.ssoSessions.removeById(ssoSession.id);
@@ -48,11 +67,17 @@ export const check = createPathHandler(ROUTES.check.path)(
     }
 
     if (session) {
+      console.debug(
+        `Session found for user ${session.username}, allowing connection`,
+      );
       // Session is valid, return 200 to allow the connection
       return allowConnection(c, session.username);
     }
 
     // Redirect to sso (response will be forwarded to the client)
+    console.debug(
+      `No valid session or SSO token found, redirecting to SSO with redirect query param`,
+    );
     return c.redirect(ssoRedirect);
   },
 );
