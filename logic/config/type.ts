@@ -12,6 +12,7 @@ export interface TAppConfig {
   configPath: string;
   databasePath: string;
   secureCookies: boolean;
+  ssoTokenName: string;
   sessionCookie: {
     name: string;
     maxAge: number;
@@ -37,6 +38,7 @@ export type TFlatAppConfig = Flatten<{
   configPath: string;
   databasePath: string;
   secureCookies: boolean;
+  ssoTokenName: string;
   sessionCookie: { name: string; maxAge: number };
   oauth: {
     cookie: { name: string; maxAge: number };

@@ -6,6 +6,7 @@ export const DEFAULT_CONFIG: TFlatAppConfig = {
   configPath: "/data/config.yaml",
   databasePath: "/data/db.sqlite",
   secureCookies: true,
+  ssoTokenName: "auth-portal-sso-token",
   "oauth.discord.enabled": false,
   "oauth.github.enabled": false,
   "oauth.google.enabled": false,

@@ -49,6 +49,7 @@ export const Config = mountable(
       configPath: definedOrFail(flatConfig, "configPath"),
       databasePath: definedOrFail(flatConfig, "databasePath"),
       secureCookies: definedOrFail(flatConfig, "secureCookies"),
+      ssoTokenName: definedOrFail(flatConfig, "ssoTokenName"),
       sessionCookie: {
         maxAge: definedOrFail(flatConfig, "sessionCookie.maxAge"),
         name: definedOrFail(flatConfig, "sessionCookie.name"),

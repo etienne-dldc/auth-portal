@@ -17,7 +17,8 @@ export const check = createPathHandler(ROUTES.check.path)(
     ssoRedirect.searchParams.set("redirect", redirectUrl);
 
     const session = c.get("session");
-    const token = c.req.query("token");
+    const { ssoTokenName } = Config.get();
+    const token = c.req.query(ssoTokenName);
     const authorization = c.req.header("authorization");
 
     const basicAuthCredentials = authorization

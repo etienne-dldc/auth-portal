@@ -8,6 +8,7 @@ export function configFromEnv(): TFlatAppConfig {
     databasePath: Deno.env.get("DATABASE_PATH"),
     secureCookies: parseFlag("SECURE_COOKIES"),
     otelDenoEnabled: parseFlag("OTEL_DENO"),
+    ssoTokenName: Deno.env.get("SSO_TOKEN_NAME"),
     "sessionCookie.name": Deno.env.get("AUTH_COOKIE_NAME"),
     "sessionCookie.maxAge": parseIntEnv("AUTH_COOKIE_MAX_AGE"),
     "oauth.discord.clientId": Deno.env.get("OAUTH_DISCORD_CLIENT_ID"),

@@ -1,4 +1,5 @@
 import { SSOErrorPage } from "../../views/SSOErrorPage.tsx";
+import { Config } from "../config/config.ts";
 import { SSORedirectCookie } from "../cookies.ts";
 import * as db from "../database/actions.ts";
 import { createPathHandler } from "../factory.ts";
@@ -31,9 +32,10 @@ export const sso = createPathHandler(ROUTES.sso.path)(
       return c.render(<SSOErrorPage error="NotAllowed" />);
     }
     const ssoSession = db.ssoSessions.create(session.username);
-    // Generate the SSO login token, thren redirect to the URL with the token as a query param
+    // Generate the SSO login token, then redirect to the URL with the token as a query param
     const redirectUrl = new URL(redirect);
-    redirectUrl.searchParams.set("token", ssoSession.token);
+    const { ssoTokenName } = Config.get();
+    redirectUrl.searchParams.set(ssoTokenName, ssoSession.token);
     return c.redirect(redirectUrl.toString());
   },
 );
