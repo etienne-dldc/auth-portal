@@ -1,11 +1,10 @@
-import type { AppConfig } from "./type.ts";
+import type { TFlatAppConfig } from "./type.ts";
 
 export function mergeConfig(
-  base: AppConfig,
-  ...overrides: Partial<AppConfig>[]
-): AppConfig {
-  const result: AppConfig = { ...base };
-
+  base: TFlatAppConfig,
+  ...overrides: Partial<TFlatAppConfig>[]
+): TFlatAppConfig {
+  const result: TFlatAppConfig = { ...base };
   for (const override of overrides) {
     Object.entries(override).forEach(([key, value]) => {
       if (value !== undefined) {

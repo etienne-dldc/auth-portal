@@ -1,8 +1,18 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@cmd-johnson/oauth2-client@2": "2.0.0",
+    "jsr:@db/sqlite@0.13": "0.13.0",
+    "jsr:@denosaurs/plug@1": "1.1.0",
+    "jsr:@denosaurs/plug@^1.1.0": "1.1.0",
     "jsr:@dldc/css-builder@^1.6.0": "1.6.0",
+    "jsr:@dldc/erreur@^7.1.1": "7.1.1",
     "jsr:@dldc/hono-ui@^2.3.4": "2.3.4",
+    "jsr:@dldc/sqlite@^3.1.1": "3.1.1",
+    "jsr:@dldc/zendb-db-sqlite@^5.1.0": "5.1.0",
+    "jsr:@dldc/zendb@12": "12.1.0",
+    "jsr:@dldc/zendb@^12.1.0": "12.1.0",
+    "jsr:@felix/argon2@^3.0.5": "3.0.5",
     "jsr:@hono/hono@^4.12.21": "4.12.26",
     "jsr:@hono/hono@^4.12.26": "4.12.26",
     "jsr:@hono/hono@^4.8.3": "4.12.26",
@@ -10,23 +20,58 @@
     "jsr:@standard-schema/spec@1": "1.1.0",
     "jsr:@std/assert@^1.0.19": "1.0.19",
     "jsr:@std/cli@^1.0.30": "1.0.30",
+    "jsr:@std/dotenv@~0.225.7": "0.225.7",
+    "jsr:@std/encoding@1": "1.0.10",
+    "jsr:@std/encoding@^1.0.5": "1.0.10",
     "jsr:@std/expect@^1.0.19": "1.0.19",
+    "jsr:@std/fmt@1": "1.0.10",
     "jsr:@std/fmt@^1.0.10": "1.0.10",
+    "jsr:@std/fs@1": "1.0.24",
     "jsr:@std/fs@^1.0.24": "1.0.24",
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "jsr:@std/internal@^1.0.13": "1.0.14",
     "jsr:@std/internal@^1.0.14": "1.0.14",
+    "jsr:@std/path@1": "1.1.5",
+    "jsr:@std/path@1.0": "1.0.9",
     "jsr:@std/path@^1.1.4": "1.1.5",
     "jsr:@std/path@^1.1.5": "1.1.5",
     "jsr:@std/yaml@^1.1.1": "1.1.1",
     "jsr:@valibot/valibot@^1.4.1": "1.4.1",
     "npm:@opentelemetry/api@^1.9.1": "1.9.1",
     "npm:lucide-static@^1.21.0": "1.21.0",
-    "npm:type-fest@^5.6.0": "5.7.0"
+    "npm:nanoid@^5.1.16": "5.1.16",
+    "npm:regexparam@3": "3.0.0",
+    "npm:type-fest@^5.6.0": "5.7.0",
+    "npm:type-fest@^5.7.0": "5.7.0"
   },
   "jsr": {
+    "@cmd-johnson/oauth2-client@2.0.0": {
+      "integrity": "e2f2fa6e657db2a39a55f7d19a9e331c317f3ddbb6068aa44947aa247a99125e",
+      "dependencies": [
+        "jsr:@std/encoding@^1.0.5"
+      ]
+    },
+    "@db/sqlite@0.13.0": {
+      "integrity": "4545c635e0b3d4ddfdc0f2240f932f24b8ad0178e9c2e3a0f9403e7b18ae2fb5",
+      "dependencies": [
+        "jsr:@denosaurs/plug@1",
+        "jsr:@std/path@1.0"
+      ]
+    },
+    "@denosaurs/plug@1.1.0": {
+      "integrity": "eb2f0b7546c7bca2000d8b0282c54d50d91cf6d75cb26a80df25a6de8c4bc044",
+      "dependencies": [
+        "jsr:@std/encoding@1",
+        "jsr:@std/fmt@1",
+        "jsr:@std/fs@1",
+        "jsr:@std/path@1"
+      ]
+    },
     "@dldc/css-builder@1.6.0": {
       "integrity": "cae89cec79a7d2da3d988c993b83153906584f21bb5b6df6f8ff9a7f6ef1ef79"
+    },
+    "@dldc/erreur@7.1.1": {
+      "integrity": "9ba954ae0654e4ed003959c77aaa009fdf6c64f60bf4cfec33b134556ab0d6da"
     },
     "@dldc/hono-ui@2.3.4": {
       "integrity": "a735defb8883f6642d6d1a1c8d4b32a6c83a65cdedb6a2cc7f685f39394354e9",
@@ -34,7 +79,30 @@
         "jsr:@dldc/css-builder",
         "jsr:@dldc/hono-ui",
         "jsr:@hono/hono@^4.12.21",
-        "npm:type-fest"
+        "npm:type-fest@^5.6.0"
+      ]
+    },
+    "@dldc/sqlite@3.1.1": {
+      "integrity": "443616a941ed36e39a2a3451b545a4bb5fddb5620fba936d3a8ea01c655e72ca"
+    },
+    "@dldc/zendb@12.1.0": {
+      "integrity": "596f390c6a8d3667f8bd92290a6f3c1b676b2424c8dbe64096096c92530e71b9",
+      "dependencies": [
+        "jsr:@dldc/erreur",
+        "jsr:@dldc/sqlite"
+      ]
+    },
+    "@dldc/zendb-db-sqlite@5.1.0": {
+      "integrity": "f1bc42b583913e35ea1140da8b92de5f3cd8b79e4179118f2388fbf21cb0e6cb",
+      "dependencies": [
+        "jsr:@db/sqlite",
+        "jsr:@dldc/zendb@12"
+      ]
+    },
+    "@felix/argon2@3.0.5": {
+      "integrity": "f016186f0b9c68f6b18c46a665f38f3a208252b4a080d8ad3a5b5e98095f9d59",
+      "dependencies": [
+        "jsr:@denosaurs/plug@^1.1.0"
       ]
     },
     "@hono/hono@4.12.26": {
@@ -59,9 +127,15 @@
     "@std/cli@1.0.30": {
       "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13",
       "dependencies": [
-        "jsr:@std/fmt",
+        "jsr:@std/fmt@^1.0.10",
         "jsr:@std/internal@^1.0.14"
       ]
+    },
+    "@std/dotenv@0.225.7": {
+      "integrity": "11d8db03ca4ad5aba9eba809f2e8058b2a4f320b7b09fea4b360e162928329e3"
+    },
+    "@std/encoding@1.0.10": {
+      "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
     "@std/expect@1.0.19": {
       "integrity": "25271785688c7ff902fa54875d6aa4001f552c5578f7f0fefb5b5aac1fc2ed8a",
@@ -84,6 +158,9 @@
     "@std/internal@1.0.14": {
       "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
+    "@std/path@1.0.9": {
+      "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
+    },
     "@std/path@1.1.5": {
       "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
       "dependencies": [
@@ -104,6 +181,13 @@
     "lucide-static@1.21.0": {
       "integrity": "sha512-6248z2/4sEyKkYAPPUYxOPiB2RCfMmLdMHuoOhsTFnoD40ixAoHmTVhOPux8ADa1NTBmzpEKF7WNePm+Ms503Q=="
     },
+    "nanoid@5.1.16": {
+      "integrity": "sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==",
+      "bin": true
+    },
+    "regexparam@3.0.0": {
+      "integrity": "sha512-RSYAtP31mvYLkAHrOlh25pCNQ5hWnT106VukGaaFfuJrZFkGRX5GhUAdPqpSDXxOhA2c4akmRuplv1mRqnBn6Q=="
+    },
     "tagged-tag@1.0.0": {
       "integrity": "sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng=="
     },
@@ -116,17 +200,26 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@cmd-johnson/oauth2-client@2",
+      "jsr:@db/sqlite@0.13",
       "jsr:@dldc/hono-ui@^2.3.4",
+      "jsr:@dldc/zendb-db-sqlite@^5.1.0",
+      "jsr:@dldc/zendb@^12.1.0",
+      "jsr:@felix/argon2@^3.0.5",
       "jsr:@hono/hono@^4.12.26",
       "jsr:@hono/standard-validator@~0.2.2",
       "jsr:@std/cli@^1.0.30",
+      "jsr:@std/dotenv@~0.225.7",
       "jsr:@std/expect@^1.0.19",
       "jsr:@std/fs@^1.0.24",
       "jsr:@std/path@^1.1.5",
       "jsr:@std/yaml@^1.1.1",
       "jsr:@valibot/valibot@^1.4.1",
       "npm:@opentelemetry/api@^1.9.1",
-      "npm:lucide-static@^1.21.0"
+      "npm:lucide-static@^1.21.0",
+      "npm:nanoid@^5.1.16",
+      "npm:regexparam@3",
+      "npm:type-fest@^5.7.0"
     ]
   }
 }

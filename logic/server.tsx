@@ -1,15 +1,21 @@
-import { Hono } from "@hono/hono";
 import { serveStatic } from "@hono/hono/deno";
 import { routePath } from "@hono/hono/route";
 import { SpanStatusCode, trace } from "@opentelemetry/api";
 import console from "node:console";
 import { ErrorPage } from "../views/ErrorPage.tsx";
 import { NotFoundPage } from "../views/NotFoundPage.tsx";
-import type { AppConfig } from "./config/type.ts";
+import { createApp } from "./factory.ts";
+import { home } from "./handlers/home.tsx";
+import { login } from "./handlers/login.tsx";
+import { logout } from "./handlers/logout.tsx";
+import { oauthCallback } from "./handlers/oauthCallback.tsx";
+import { oauthStart } from "./handlers/oauthStart.tsx";
+import { sso } from "./handlers/sso.tsx";
+import { authentication } from "./middlewares/authentication.ts";
+import { ROUTES } from "./routes.ts";
 
-export function createServer(config: AppConfig) {
-  const app = new Hono();
-  console.log(config);
+export function createServer() {
+  const app = createApp();
 
   app.use("*", async (c, next) => {
     try {
@@ -46,6 +52,15 @@ export function createServer(config: AppConfig) {
       c.header("cache-control", "no-store");
     }
   });
+
+  app.use("*", authentication);
+
+  app.use(ROUTES.home.path, ...home);
+  app.use(ROUTES.login.path, ...login);
+  app.use(ROUTES.logout.path, ...logout);
+  app.use(ROUTES.check.path, ...sso);
+  app.use(ROUTES.oauthStart.path, ...oauthStart);
+  app.use(ROUTES.oauthCallback.path, ...oauthCallback);
 
   app.onError((err, c) => {
     console.error(err);

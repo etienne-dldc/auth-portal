@@ -1,49 +1,86 @@
 import { parseArgs } from "@std/cli/parse-args";
-import type { AppConfig } from "./type.ts";
+import type { TFlatAppConfig } from "./type.ts";
 
-export function configFromArgs(args: string[]): Partial<AppConfig> {
+export function configFromArgs(args: string[]): TFlatAppConfig {
   const parsed = parseArgs(args, {
     string: [
-      "config",
       "port",
+      "origin",
+      "config-path",
+      "database-path",
+      "auth-cookie",
+      "oauth.discord.client-id",
+      "oauth.discord.client-secret",
+      "oauth.github.client-id",
+      "oauth.github.client-secret",
+      "oauth.google.client-id",
+      "oauth.google.client-secret",
+      "oauth.session-duration-seconds",
+      "oauth.cookie.name",
+      "oauth.cookie.max-age",
+    ],
+    boolean: [
+      "oauth.discord.enabled",
+      "oauth.github.enabled",
+      "oauth.google.enabled",
     ],
     alias: {
-      c: "config",
+      c: "config-path",
       p: "port",
+    },
+    negatable: [
+      "oauth.discord.enabled",
+      "oauth.github.enabled",
+      "oauth.google.enabled",
+    ],
+    default: {
+      "oauth.discord.enabled": undefined,
+      "oauth.github.enabled": undefined,
+      "oauth.google.enabled": undefined,
     },
   });
 
   return {
-    port: parsePort(asString(parsed.port)),
-    configPath: asString(parsed.config),
+    port: parseNumber(parsed.port, "port"),
+    origin: parsed.origin,
+    configPath: parsed["config-path"],
+    databasePath: parsed["database-path"],
+    "oauth.discord.clientId": parsed.oauth?.discord?.["client-id"],
+    "oauth.discord.clientSecret": parsed.oauth?.discord?.["client-secret"],
+    "oauth.discord.enabled": parsed.oauth?.discord?.enabled,
+    "oauth.github.clientId": parsed.oauth?.github?.["client-id"],
+    "oauth.github.clientSecret": parsed.oauth?.github?.["client-secret"],
+    "oauth.github.enabled": parsed.oauth?.github?.enabled,
+    "oauth.google.clientId": parsed.oauth?.google?.["client-id"],
+    "oauth.google.clientSecret": parsed.oauth?.google?.["client-secret"],
+    "oauth.google.enabled": parsed.oauth?.google?.enabled,
+    "oauth.cookie.name": parsed.oauth?.cookie?.name,
+    "oauth.cookie.maxAge": parseNumber(
+      parsed.oauth?.cookie?.["max-age"],
+      "oauth.cookie.max-age",
+    ),
+    "oauth.sessionDurationSeconds": parseNumber(
+      parsed.oauth?.["session-duration-seconds"],
+      "oauth.session-duration-seconds",
+    ),
   };
 }
 
-function asString(value: unknown): string | undefined {
-  if (typeof value === "string") {
-    return value;
-  }
-
-  if (Array.isArray(value)) {
-    const lastValue = value[value.length - 1];
-    return typeof lastValue === "string" ? lastValue : undefined;
-  }
-
-  return undefined;
-}
-
-function parsePort(raw: string | undefined): number | undefined {
-  if (!raw) {
+function parseNumber(
+  value: string | undefined,
+  name: string,
+): number | undefined {
+  if (value === undefined) {
     return undefined;
   }
-
-  const parsed = Number(raw);
-  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 65535) {
+  const parsed = parseInt(value, 10);
+  if (isNaN(parsed)) {
     console.error(
-      `[env] Invalid --port=${JSON.stringify(raw)}, ignoring CLI value`,
+      `[args] Invalid number for ${name}: ${
+        JSON.stringify(value)
+      }, ignoring CLI value`,
     );
     return undefined;
   }
-
   return parsed;
 }

@@ -1,0 +1,23 @@
+interface RawRedirectPageProps {
+  redirectUrl: string;
+}
+
+export const RawRedirectPage = ({ redirectUrl }: RawRedirectPageProps) => {
+  return (
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>Redirecting...</p>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.location.href = "${redirectUrl}";`,
+          }}
+        />
+      </body>
+    </html>
+  );
+};

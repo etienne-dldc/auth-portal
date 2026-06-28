@@ -1,33 +1,61 @@
-import type { AppConfig } from "./type.ts";
+import type { TFlatAppConfig } from "./type.ts";
 
-export function configFromEnv(): Partial<AppConfig> {
+export function configFromEnv(): TFlatAppConfig {
   return {
-    port: parsePort(Deno.env.get("PORT")),
+    port: parseIntEnv("PORT"),
+    origin: Deno.env.get("ORIGIN"),
     configPath: Deno.env.get("CONFIG_PATH"),
-    otelDenoEnabled: parseFlag(Deno.env.get("OTEL_DENO")),
+    databasePath: Deno.env.get("DATABASE_PATH"),
+    secureCookies: parseFlag("SECURE_COOKIES"),
+    otelDenoEnabled: parseFlag("OTEL_DENO"),
+    "sessionCookie.name": Deno.env.get("AUTH_COOKIE_NAME"),
+    "sessionCookie.maxAge": parseIntEnv("AUTH_COOKIE_MAX_AGE"),
+    "oauth.discord.clientId": Deno.env.get("OAUTH_DISCORD_CLIENT_ID"),
+    "oauth.discord.clientSecret": Deno.env.get("OAUTH_DISCORD_CLIENT_SECRET"),
+    "oauth.discord.enabled": parseFlag("OAUTH_DISCORD_ENABLED"),
+    "oauth.github.clientId": Deno.env.get("OAUTH_GITHUB_CLIENT_ID"),
+    "oauth.github.clientSecret": Deno.env.get("OAUTH_GITHUB_CLIENT_SECRET"),
+    "oauth.github.enabled": parseFlag("OAUTH_GITHUB_ENABLED"),
+    "oauth.google.clientId": Deno.env.get("OAUTH_GOOGLE_CLIENT_ID"),
+    "oauth.google.clientSecret": Deno.env.get("OAUTH_GOOGLE_CLIENT_SECRET"),
+    "oauth.google.enabled": parseFlag("OAUTH_GOOGLE_ENABLED"),
+    "oauth.cookie.name": Deno.env.get("OAUTH_SESSION_KEY_COOKIE_NAME"),
+    "oauth.cookie.maxAge": parseIntEnv("OAUTH_SESSION_KEY_COOKIE_MAX_AGE"),
+    "oauth.sessionDurationSeconds": parseIntEnv(
+      "OAUTH_SESSION_DURATION_SECONDS",
+    ),
   };
 }
 
-function parseFlag(raw: string | undefined): boolean {
+function parseFlag(name: string): boolean | undefined {
+  const raw = Deno.env.get(name);
   if (!raw) {
+    return undefined;
+  }
+  const normalized = raw.trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+  if (["0", "false", "no", "off"].includes(normalized)) {
     return false;
   }
-
-  const normalized = raw.trim().toLowerCase();
-  return normalized === "1" || normalized === "true" || normalized === "yes" ||
-    normalized === "on";
+  console.error(
+    `[env] Invalid ${name}=${JSON.stringify(raw)}, ignoring CLI value`,
+  );
+  return undefined;
 }
 
-function parsePort(raw: string | undefined): number | undefined {
+function parseIntEnv(name: string): number | undefined {
+  const raw = Deno.env.get(name);
   if (!raw) {
     return undefined;
   }
-
-  const parsed = Number(raw);
-  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 65535) {
-    console.error(`[env] Invalid PORT=${JSON.stringify(raw)}`);
+  const parsed = parseInt(raw, 10);
+  if (isNaN(parsed)) {
+    console.error(
+      `[env] Invalid ${name}=${JSON.stringify(raw)}, ignoring CLI value`,
+    );
     return undefined;
   }
-
   return parsed;
 }

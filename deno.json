@@ -8,24 +8,40 @@
     "deps:update": "deno outdated --update --latest --interactive",
     "check": "deno fmt --check . && deno lint . && deno check .",
     "start": "deno run --allow-net --allow-env main.tsx",
-    "dev": "deno run -A --watch main.tsx -- --config .data/config.yml",
+    "dev": "deno run -A --watch main.tsx",
     "test:run": "deno test -A"
   },
   "imports": {
+    "@cmd-johnson/oauth2-client": "jsr:@cmd-johnson/oauth2-client@^2.0.0",
+    "@db/sqlite": "jsr:@db/sqlite@^0.13.0",
     "@dldc/hono-ui": "jsr:@dldc/hono-ui@^2.3.4",
+    "@dldc/zendb": "jsr:@dldc/zendb@^12.1.0",
+    "@dldc/zendb-db-sqlite": "jsr:@dldc/zendb-db-sqlite@^5.1.0",
+    "@felix/argon2": "jsr:@felix/argon2@^3.0.5",
     "@hono/hono": "jsr:@hono/hono@^4.12.26",
     "@hono/standard-validator": "jsr:@hono/standard-validator@^0.2.2",
     "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
     "@std/cli": "jsr:@std/cli@^1.0.30",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.7",
     "@std/expect": "jsr:@std/expect@^1.0.19",
     "@std/fs": "jsr:@std/fs@^1.0.24",
     "@std/path": "jsr:@std/path@^1.1.5",
     "@std/yaml": "jsr:@std/yaml@^1.1.1",
     "@valibot/valibot": "jsr:@valibot/valibot@^1.4.1",
-    "lucide-static": "npm:lucide-static@^1.21.0"
+    "lucide-static": "npm:lucide-static@^1.21.0",
+    "nanoid": "npm:nanoid@^5.1.16",
+    "regexparam": "npm:regexparam@^3.0.0",
+    "type-fest": "npm:type-fest@^5.7.0"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "@hono/hono/jsx"
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "no-explicit-any"
+      ]
+    }
   }
 }

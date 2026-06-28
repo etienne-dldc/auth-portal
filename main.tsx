@@ -1,21 +1,19 @@
+import { load } from "@std/dotenv";
 import denoJson from "./deno.json" with { type: "json" };
-import { configFromArgs } from "./logic/config/configFromArgs.ts";
-import { configFromEnv } from "./logic/config/configFromEnv.ts";
-import { DEFAULT_CONFIG } from "./logic/config/defaultConfig.ts";
-import { logAppConfig } from "./logic/config/logAppConfig.ts";
-import { mergeConfig } from "./logic/config/mergeConfig.ts";
+import { Config } from "./logic/config/config.ts";
+import { mount } from "./logic/mount.ts";
 import { createServer } from "./logic/server.tsx";
 
-const config = mergeConfig(
-  DEFAULT_CONFIG,
-  configFromEnv(),
-  configFromArgs(Deno.args),
-);
+await load({ envPath: "./.env.local", export: true });
+await load({ envPath: "./.env", export: true });
+
+await mount();
+
+const config = Config.get();
 
 console.log(`Starting Auth Portal v${denoJson.version}`);
-logAppConfig(config);
 
-const app = createServer(config);
+const app = createServer();
 
 console.log(`Auth Portal listening on :${config.port}`);
 Deno.serve({ port: config.port }, app.fetch);
