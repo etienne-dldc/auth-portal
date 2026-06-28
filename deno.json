@@ -7,7 +7,7 @@
     "deps:outdated": "deno outdated",
     "deps:update": "deno outdated --update --latest --interactive",
     "check": "deno fmt --check . && deno lint . && deno check .",
-    "start": "deno run --allow-net --allow-env main.tsx",
+    "start": "deno run --allow-net --allow-env --allow-ffi main.tsx",
     "dev": "deno run -A --watch main.tsx",
     "test:run": "deno test -A"
   },
