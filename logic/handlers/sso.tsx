@@ -9,15 +9,15 @@ export const sso = createPathHandler(ROUTES.sso.path)(
   async (c) => {
     const session = c.get("session");
     if (!session) {
-      const redirect = c.req.param("redirect");
+      const redirect = c.req.query("redirect");
       if (redirect) {
         await SSORedirectCookie.get().write(c, redirect);
         return c.redirect(ROUTES.login.path);
       }
       return c.render(<SSOErrorPage error="MissingRedirect" />);
     }
-    // We have a session, get redirect from param or cookie
-    const redirect = c.req.param("redirect") ||
+    // We have a session, get redirect from query or cookie
+    const redirect = c.req.query("redirect") ||
       await SSORedirectCookie.get().read(c);
     if (!redirect) {
       return c.render(<SSOErrorPage error="MissingRedirect" />);
