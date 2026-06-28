@@ -7,11 +7,21 @@ import { createPathHandler } from "../factory.ts";
 import { ROUTES } from "../routes.ts";
 import { System } from "../system.ts";
 
+const log = (message: string, ...args: unknown[]) =>
+  console.debug(`[Check Handler] ${message}`, ...args);
+
 /**
  * This endpoint is expected to be called by forward_auth to check if the user is logged in or not.
  */
 export const check = createPathHandler(ROUTES.check.path)(
   async (c) => {
+    // DEBUG
+    log(`x-forwarded-uri: ${c.req.header("x-forwarded-uri")}`);
+    log(`x-forwarded-host: ${c.req.header("x-forwarded-host")}`);
+    log(`x-forwarded-proto: ${c.req.header("x-forwarded-proto")}`);
+    log(`host: ${c.req.header("host")}`);
+    log(`c.req.url: ${c.req.url}`);
+
     const redirectUrl = getRedirectUrl(c);
     const ssoRedirect = new URL(ROUTES.sso.link({}), Config.get().origin);
     ssoRedirect.searchParams.set("redirect", redirectUrl);
@@ -25,37 +35,37 @@ export const check = createPathHandler(ROUTES.check.path)(
       : null;
 
     if (basicAuthCredentials) {
-      console.debug(
+      log(
         `Basic auth credentials found for user ${basicAuthCredentials.username}, verifying...`,
       );
       const { username, password } = basicAuthCredentials;
       const isValid = await System.get().verifyBasicAuth(username, password);
       if (isValid) {
-        console.debug(
+        log(
           `Basic auth credentials for user ${username} are valid, allowing connection`,
         );
         return allowConnection(c, username);
       }
-      console.debug(
+      log(
         `Basic auth credentials for user ${username} are invalid, continuing...`,
       );
     }
 
     const ssoSession = token ? db.ssoSessions.findByToken(token) : null;
     if (ssoSession) {
-      console.debug(
+      log(
         `SSO session found for user ${ssoSession.username}, checking expiration...`,
       );
       const ssoSessionExpired = Temporal.Now.instant().epochMilliseconds >
         ssoSession.expiresAt.epochMilliseconds;
       if (ssoSessionExpired) {
-        console.debug(
+        log(
           `SSO session for user ${ssoSession.username} is expired, redirecting to SSO with redirect query param`,
         );
         // Token is expired, try again
         return c.redirect(ssoRedirect);
       }
-      console.debug(
+      log(
         `SSO session for user ${ssoSession.username} is valid, allowing connection and removing SSO session`,
       );
       // Check was hit with a valid SSO token, remove the SSO session and return a redirect with session cookie set
@@ -67,7 +77,7 @@ export const check = createPathHandler(ROUTES.check.path)(
     }
 
     if (session) {
-      console.debug(
+      log(
         `Session found for user ${session.username}, allowing connection`,
       );
       // Session is valid, return 200 to allow the connection
@@ -75,7 +85,7 @@ export const check = createPathHandler(ROUTES.check.path)(
     }
 
     // Redirect to sso (response will be forwarded to the client)
-    console.debug(
+    log(
       `No valid session or SSO token found, redirecting to SSO with redirect query param`,
     );
     return c.redirect(ssoRedirect);
