@@ -27,7 +27,7 @@ export const oauthStart = createPathHandler(ROUTES.oauthStart.path)(
     const sessionToken = createToken();
     const oauth = await client.code.getAuthorizationUri();
     const { codeVerifier, uri: loginUrl } = oauth;
-    const loginSession = db.loginSessions.create(
+    const loginSession = db.oauthSessions.create(
       provider,
       codeVerifier,
       sessionToken,

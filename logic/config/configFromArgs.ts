@@ -8,8 +8,10 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
       "origin",
       "config-path",
       "database-path",
-      "auth-cookie",
-      "sso-token-name",
+      "session.cookie-name",
+      "session.session-duration-seconds",
+      "sso.token-name",
+      "sso.session-duration-seconds",
       "oauth.discord.client-id",
       "oauth.discord.client-secret",
       "oauth.github.client-id",
@@ -20,15 +22,15 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
       "oauth.cookie.name",
       "oauth.cookie.max-age",
     ],
+    alias: {
+      c: "config-path",
+      p: "port",
+    },
     boolean: [
       "oauth.discord.enabled",
       "oauth.github.enabled",
       "oauth.google.enabled",
     ],
-    alias: {
-      c: "config-path",
-      p: "port",
-    },
     negatable: [
       "oauth.discord.enabled",
       "oauth.github.enabled",
@@ -46,7 +48,11 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
     origin: parsed.origin,
     configPath: parsed["config-path"],
     databasePath: parsed["database-path"],
-    ssoTokenName: parsed["sso-token-name"],
+    "sso.tokenName": parsed.sso?.["token-name"],
+    "sso.sessionDurationSeconds": parseNumber(
+      parsed.sso?.["session-duration-seconds"],
+      "sso.session-duration-seconds",
+    ),
     "oauth.discord.clientId": parsed.oauth?.discord?.["client-id"],
     "oauth.discord.clientSecret": parsed.oauth?.discord?.["client-secret"],
     "oauth.discord.enabled": parsed.oauth?.discord?.enabled,
@@ -56,10 +62,10 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
     "oauth.google.clientId": parsed.oauth?.google?.["client-id"],
     "oauth.google.clientSecret": parsed.oauth?.google?.["client-secret"],
     "oauth.google.enabled": parsed.oauth?.google?.enabled,
-    "oauth.cookie.name": parsed.oauth?.cookie?.name,
-    "oauth.cookie.maxAge": parseNumber(
-      parsed.oauth?.cookie?.["max-age"],
-      "oauth.cookie.max-age",
+    "session.cookieName": parsed.session?.["cookie-name"],
+    "session.sessionDurationSeconds": parseNumber(
+      parsed.session?.["session-duration-seconds"],
+      "session.session-duration-seconds",
     ),
     "oauth.sessionDurationSeconds": parseNumber(
       parsed.oauth?.["session-duration-seconds"],

@@ -6,13 +6,13 @@ export const DEFAULT_CONFIG: TFlatAppConfig = {
   configPath: "/data/config.yaml",
   databasePath: "/data/db.sqlite",
   secureCookies: true,
-  ssoTokenName: "auth-portal-sso-token",
+  "sso.tokenName": "auth-portal-sso-token",
+  "sso.sessionDurationSeconds": 60, // 1 minute
   "oauth.discord.enabled": false,
   "oauth.github.enabled": false,
   "oauth.google.enabled": false,
-  "sessionCookie.name": "auth_portal_v1",
-  "sessionCookie.maxAge": 60 * 60 * 24 * 7, // 7 days
-  "oauth.sessionDurationSeconds": 60 * 10, // 10 minutes
-  "oauth.cookie.name": "auth_portal_oauth_session_key",
-  "oauth.cookie.maxAge": 60 * 10, // 10 minutes
+  "session.cookieName": "auth_portal_v1",
+  "session.sessionDurationSeconds": 60 * 60 * 24 * 7, // 7 days
+  "oauth.sessionDurationSeconds": 5 * 60, // 5 minutes
+  "oauth.cookieName": "auth_portal_oauth_session_key",
 };

@@ -5,6 +5,7 @@ import console from "node:console";
 import { ErrorPage } from "../views/ErrorPage.tsx";
 import { NotFoundPage } from "../views/NotFoundPage.tsx";
 import { createApp } from "./factory.ts";
+import { basicAuthHelper } from "./handlers/basicAuthHelper.tsx";
 import { check } from "./handlers/check.tsx";
 import { home } from "./handlers/home.tsx";
 import { login } from "./handlers/login.tsx";
@@ -56,13 +57,14 @@ export function createServer() {
 
   app.use("*", authentication);
 
-  app.use(ROUTES.home.path, ...home);
-  app.use(ROUTES.login.path, ...login);
-  app.use(ROUTES.logout.path, ...logout);
-  app.use(ROUTES.sso.path, ...sso);
-  app.use(ROUTES.check.path, ...check);
-  app.use(ROUTES.oauthStart.path, ...oauthStart);
-  app.use(ROUTES.oauthCallback.path, ...oauthCallback);
+  app.get(ROUTES.home.path, ...home);
+  app.get(ROUTES.login.path, ...login);
+  app.get(ROUTES.logout.path, ...logout);
+  app.get(ROUTES.sso.path, ...sso);
+  app.get(ROUTES.check.path, ...check);
+  app.get(ROUTES.basicAuthHelper.path, ...basicAuthHelper);
+  app.get(ROUTES.oauthStart.path, ...oauthStart);
+  app.get(ROUTES.oauthCallback.path, ...oauthCallback);
 
   app.onError((err, c) => {
     console.error(err);

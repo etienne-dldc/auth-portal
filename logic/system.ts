@@ -31,13 +31,14 @@ const usersSchema = v.record(
 
 const groupsSchema = v.record(usernameSchema, v.array(usernameSchema));
 
-const hostnameSchema = v.pipe(
+const originSchema = v.pipe(
   v.string(),
   v.regex(/^http(s)?:\/\/[a-zA-Z0-9.-]+(:[0-9]+)?$/),
 );
 
 const appsSchema = v.array(v.object({
-  host: hostnameSchema,
+  origin: originSchema,
+  name: v.optional(v.string()),
   allowed: v.optional(v.array(usernameSchema)),
   public: v.optional(v.boolean()),
 }));
@@ -50,6 +51,11 @@ const systemSchema = v.object({
 
 export type TSystemData = v.InferOutput<typeof systemSchema>;
 
+export interface TSystemApp {
+  origin: string;
+  name?: string;
+}
+
 export interface TSystem {
   /**
    * Given a list of identities, resolve the corresponding username.
@@ -61,6 +67,8 @@ export interface TSystem {
   isAllowed(redirectUrl: string, username: string): boolean;
 
   verifyBasicAuth(username: string, password: string): Promise<boolean>;
+
+  getAppsForUser(username: string): TSystemApp[];
 }
 
 export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
@@ -125,21 +133,21 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
   });
 
   // Validate that apps hostnames are unique
-  const appHostnames = new Set<string>();
+  const appOrigins = new Set<string>();
   system.apps.forEach((app) => {
-    if (appHostnames.has(app.host)) {
+    if (appOrigins.has(app.origin)) {
       throw new Error(
-        `Invalid config file: duplicate app hostname "${app.host}"`,
+        `Invalid config file: duplicate app origin "${app.origin}"`,
       );
     }
-    appHostnames.add(app.host);
+    appOrigins.add(app.origin);
   });
 
   // Validate that apps have either allowed users or are public
   system.apps.forEach((app) => {
     if (!app.allowed && !app.public) {
       throw new Error(
-        `Invalid config file: app "${app.host}" must have either allowed users or be public`,
+        `Invalid config file: app "${app.origin}" must have either allowed users or be public`,
       );
     }
   });
@@ -154,7 +162,7 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
       app.allowed.forEach((allowedUser) => {
         if (!allEntities.has(allowedUser)) {
           throw new Error(
-            `Invalid config file: app "${app.host}" has an allowed user "${allowedUser}" that does not correspond to a valid username or group name`,
+            `Invalid config file: app "${app.origin}" has an allowed user "${allowedUser}" that does not correspond to a valid username or group name`,
           );
         }
       });
@@ -247,7 +255,7 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
         }
       });
     }
-    allowedUsersByApp.set(app.host, allowedUsers);
+    allowedUsersByApp.set(app.origin, allowedUsers);
   });
 
   const systemInstance: TSystem = {
@@ -316,7 +324,7 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
     },
     isAllowed(redirectUrl: string, username: string): boolean {
       const url = new URL(redirectUrl);
-      const app = system.apps.find((app) => app.host === url.origin);
+      const app = system.apps.find((app) => app.origin === url.origin);
       if (!app) {
         return false;
       }
@@ -326,7 +334,7 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
       if (!app.allowed) {
         return false;
       }
-      const allowedUsers = allowedUsersByApp.get(app.host);
+      const allowedUsers = allowedUsersByApp.get(app.origin);
       if (!allowedUsers) {
         return false;
       }
@@ -347,6 +355,18 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
         }
       }
       return false;
+    },
+    getAppsForUser(username: string): TSystemApp[] {
+      return system.apps.filter((app) => {
+        if (app.public) {
+          return true;
+        }
+        const allowedUsers = allowedUsersByApp.get(app.origin);
+        if (!allowedUsers) {
+          return false;
+        }
+        return allowedUsers.has(username);
+      }).map(({ origin, name }) => ({ origin, name }));
     },
   };
 

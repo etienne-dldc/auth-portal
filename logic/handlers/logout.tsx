@@ -9,7 +9,8 @@ export const logout = createPathHandler(ROUTES.logout.path)(
     if (!session) {
       return c.redirect(ROUTES.login.path);
     }
-    db.sessions.create(session.id);
+    db.ssoSessions.removeBySessionId(session.id);
+    db.sessions.deleteById(session.id);
     await SessionTokenCookie.get().write(c, null);
     return c.redirect(ROUTES.login.path);
   },

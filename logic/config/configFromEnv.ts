@@ -8,9 +8,10 @@ export function configFromEnv(): TFlatAppConfig {
     databasePath: Deno.env.get("DATABASE_PATH"),
     secureCookies: parseFlag("SECURE_COOKIES"),
     otelDenoEnabled: parseFlag("OTEL_DENO"),
-    ssoTokenName: Deno.env.get("SSO_TOKEN_NAME"),
-    "sessionCookie.name": Deno.env.get("AUTH_COOKIE_NAME"),
-    "sessionCookie.maxAge": parseIntEnv("AUTH_COOKIE_MAX_AGE"),
+    "session.cookieName": Deno.env.get("SESSION_COOKIE_NAME"),
+    "session.sessionDurationSeconds": parseIntEnv(
+      "SESSION_SESSION_DURATION_SECONDS",
+    ),
     "oauth.discord.clientId": Deno.env.get("OAUTH_DISCORD_CLIENT_ID"),
     "oauth.discord.clientSecret": Deno.env.get("OAUTH_DISCORD_CLIENT_SECRET"),
     "oauth.discord.enabled": parseFlag("OAUTH_DISCORD_ENABLED"),
@@ -20,11 +21,12 @@ export function configFromEnv(): TFlatAppConfig {
     "oauth.google.clientId": Deno.env.get("OAUTH_GOOGLE_CLIENT_ID"),
     "oauth.google.clientSecret": Deno.env.get("OAUTH_GOOGLE_CLIENT_SECRET"),
     "oauth.google.enabled": parseFlag("OAUTH_GOOGLE_ENABLED"),
-    "oauth.cookie.name": Deno.env.get("OAUTH_SESSION_KEY_COOKIE_NAME"),
-    "oauth.cookie.maxAge": parseIntEnv("OAUTH_SESSION_KEY_COOKIE_MAX_AGE"),
+    "oauth.cookieName": Deno.env.get("OAUTH_SESSION_KEY_COOKIE_NAME"),
     "oauth.sessionDurationSeconds": parseIntEnv(
       "OAUTH_SESSION_DURATION_SECONDS",
     ),
+    "sso.tokenName": Deno.env.get("SSO_TOKEN_NAME"),
+    "sso.sessionDurationSeconds": parseIntEnv("SSO_SESSION_DURATION_SECONDS"),
   };
 }
 

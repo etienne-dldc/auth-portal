@@ -49,16 +49,15 @@ export const Config = mountable(
       configPath: definedOrFail(flatConfig, "configPath"),
       databasePath: definedOrFail(flatConfig, "databasePath"),
       secureCookies: definedOrFail(flatConfig, "secureCookies"),
-      ssoTokenName: definedOrFail(flatConfig, "ssoTokenName"),
-      sessionCookie: {
-        maxAge: definedOrFail(flatConfig, "sessionCookie.maxAge"),
-        name: definedOrFail(flatConfig, "sessionCookie.name"),
+      session: {
+        cookieName: definedOrFail(flatConfig, "session.cookieName"),
+        durationSeconds: definedOrFail(
+          flatConfig,
+          "session.sessionDurationSeconds",
+        ),
       },
       oauth: {
-        cookie: {
-          maxAge: definedOrFail(flatConfig, "oauth.cookie.maxAge"),
-          name: definedOrFail(flatConfig, "oauth.cookie.name"),
-        },
+        cookieName: definedOrFail(flatConfig, "oauth.cookieName"),
         sessionDurationSeconds: definedOrFail(
           flatConfig,
           "oauth.sessionDurationSeconds",
@@ -66,6 +65,13 @@ export const Config = mountable(
         github,
         discord,
         google,
+      },
+      sso: {
+        tokenName: definedOrFail(flatConfig, "sso.tokenName"),
+        sessionDurationSeconds: definedOrFail(
+          flatConfig,
+          "sso.sessionDurationSeconds",
+        ),
       },
     };
 

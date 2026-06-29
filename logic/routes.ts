@@ -38,6 +38,7 @@ function toURLSearchParams(
 
 export const ROUTES = {
   home: createRoute("/"),
+  basicAuthHelper: createRoute("/basic-auth-helper"),
   login: createRoute("/login"),
   logout: createRoute("/logout"),
   check: createRoute("/check"),

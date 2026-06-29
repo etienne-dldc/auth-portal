@@ -31,11 +31,11 @@ export const sso = createPathHandler(ROUTES.sso.path)(
     if (!allowed) {
       return c.render(<SSOErrorPage error="NotAllowed" />);
     }
-    const ssoSession = db.ssoSessions.create(session.username);
+    const ssoSession = db.ssoSessions.create(session.id);
     // Generate the SSO login token, then redirect to the URL with the token as a query param
     const redirectUrl = new URL(redirect);
-    const { ssoTokenName } = Config.get();
-    redirectUrl.searchParams.set(ssoTokenName, ssoSession.token);
+    const { sso } = Config.get();
+    redirectUrl.searchParams.set(sso.tokenName, ssoSession.token);
     return c.redirect(redirectUrl.toString());
   },
 );

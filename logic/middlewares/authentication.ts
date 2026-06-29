@@ -1,6 +1,7 @@
 import { SessionTokenCookie } from "../cookies.ts";
 import * as db from "../database/actions.ts";
 import { createMiddleware } from "../factory.ts";
+import { isSessionValid } from "../helpers/isValidSession.ts";
 
 export const authentication = createMiddleware(
   async (c, next) => {
@@ -10,7 +11,7 @@ export const authentication = createMiddleware(
       return next();
     }
     const session = db.sessions.findByToken(sessionToken);
-    if (!session) {
+    if (!isSessionValid(session)) {
       await SessionTokenCookie.get().write(c, null);
       c.set("session", null);
       return next();

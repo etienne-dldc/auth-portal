@@ -1,3 +1,4 @@
+import { Cleanup } from "./cleanup.ts";
 import { Config } from "./config/config.ts";
 import {
   OAuthSessionTokenCookie,
@@ -17,8 +18,10 @@ export async function mount(): Promise<Unmount> {
   const unmountDatabase = await Db.mount();
   const unmountOAuth = await OAuth.mount();
   const unmountSystem = await System.mount();
+  const unmountCleanup = await Cleanup.mount();
 
   return async function unmount() {
+    await unmountCleanup();
     await unmountSystem();
     await unmountOAuth();
     await unmountDatabase();

@@ -21,7 +21,7 @@ export const oauthCallback = createPathHandler(ROUTES.oauthCallback.path)(
     if (!sessionToken) {
       throw new HTTPException(400, { message: "Missing session token cookie" });
     }
-    const oauthSession = db.loginSessions.findByToken(sessionToken);
+    const oauthSession = db.oauthSessions.findByToken(sessionToken);
     if (!oauthSession || oauthSession.provider !== providerName) {
       throw new HTTPException(400, { message: "Could not find session" });
     }

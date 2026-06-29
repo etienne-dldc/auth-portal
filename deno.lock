@@ -202,6 +202,7 @@
     "dependencies": [
       "jsr:@cmd-johnson/oauth2-client@2",
       "jsr:@db/sqlite@0.13",
+      "jsr:@dldc/css-builder@^1.6.0",
       "jsr:@dldc/hono-ui@^2.3.4",
       "jsr:@dldc/zendb-db-sqlite@^5.1.0",
       "jsr:@dldc/zendb@^12.1.0",

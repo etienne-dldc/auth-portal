@@ -1,3 +1,4 @@
+import { Expr } from "@dldc/zendb";
 import { Config } from "../../config/config.ts";
 import type { TOAuthProviderName } from "../../oauth.ts";
 import { Db } from "../db.ts";
@@ -30,5 +31,16 @@ export function findByToken(token: string) {
 export function removeById(id: string) {
   return Db.get().exec(
     schema.tables.oauthSessions.deleteEqual({ id }),
+  );
+}
+
+export function deteleExpired() {
+  return Db.get().exec(
+    schema.tables.oauthSessions.delete((session) =>
+      Expr.lowerThan(
+        session.expiresAt,
+        Expr.external(Temporal.Now.instant().toString()),
+      )
+    ),
   );
 }

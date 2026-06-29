@@ -27,6 +27,7 @@ const baseSchema = Schema.declare({
     id: Column.text().primary().defaultValue(createSessionId),
     token: Column.text().defaultValue(createToken),
     username: Column.text(),
+    expiresAt: Column.declare(instantDt()),
   },
   oauthSessions: {
     ...baseColumns(),
@@ -40,7 +41,7 @@ const baseSchema = Schema.declare({
     ...baseColumns(),
     id: Column.text().primary().defaultValue(createSSOSessionId),
     token: Column.text().defaultValue(createToken),
-    username: Column.text(),
+    sessionId: Column.text(),
     expiresAt: Column.declare(instantDt()),
   },
 });

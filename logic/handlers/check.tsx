@@ -4,6 +4,7 @@ import { Config } from "../config/config.ts";
 import { SessionTokenCookie } from "../cookies.ts";
 import * as db from "../database/actions.ts";
 import { createPathHandler } from "../factory.ts";
+import { isSessionValid } from "../helpers/isValidSession.ts";
 import { ROUTES } from "../routes.ts";
 import { System } from "../system.ts";
 
@@ -12,13 +13,13 @@ import { System } from "../system.ts";
  */
 export const check = createPathHandler(ROUTES.check.path)(
   async (c) => {
-    const redirectUrl = getRedirectUrl(c);
+    const successtUrl = getSuccessUrl(c);
     const ssoRedirect = new URL(ROUTES.sso.link({}), Config.get().origin);
-    ssoRedirect.searchParams.set("redirect", redirectUrl);
+    ssoRedirect.searchParams.set("redirect", successtUrl);
 
     const session = c.get("session");
-    const { ssoTokenName } = Config.get();
-    const token = c.req.query(ssoTokenName);
+    const { sso } = Config.get();
+    const token = c.req.query(sso.tokenName);
     const authorization = c.req.header("authorization");
 
     const basicAuthCredentials = authorization
@@ -33,22 +34,25 @@ export const check = createPathHandler(ROUTES.check.path)(
       }
     }
 
-    const ssoSession = token ? db.ssoSessions.findByToken(token) : null;
-    if (ssoSession) {
-      const ssoSessionExpired = Temporal.Now.instant().epochMilliseconds >
-        ssoSession.expiresAt.epochMilliseconds;
-      if (ssoSessionExpired) {
+    if (token) {
+      const ssoSession = db.ssoSessions.findByToken(token);
+      if (!isSessionValid(ssoSession)) {
         // Token is expired, try again
+        return c.redirect(ssoRedirect);
+      }
+      const linkedSession = db.sessions.findById(ssoSession.sessionId);
+      if (!isSessionValid(linkedSession)) {
+        // Linked session is invalid, try again
         return c.redirect(ssoRedirect);
       }
       // Check was hit with a valid SSO token, remove the SSO session and return a redirect with session cookie set
       // Since we are returning a non-200 response, this redirect will be forwarded to the client, and the client will follow the redirect and set the session cookie
       db.ssoSessions.removeById(ssoSession.id);
-      const session = db.sessions.create(ssoSession.username);
-      await SessionTokenCookie.get().write(c, session.token);
-      return c.redirect(redirectUrl);
+      await SessionTokenCookie.get().write(c, linkedSession.token);
+      return c.redirect(successtUrl);
     }
 
+    // Session come from the authentication middleware, so no need to check if it's valid, just check if it exists
     if (session) {
       // Session is valid, return 200 to allow the connection
       return allowConnection(c, session.username);
@@ -59,12 +63,20 @@ export const check = createPathHandler(ROUTES.check.path)(
   },
 );
 
-function getRedirectUrl(c: Context): string {
+/**
+ * URL request by the user but without the SSO token.
+ * @param c
+ * @returns
+ */
+function getSuccessUrl(c: Context): string {
+  const { sso } = Config.get();
   const host = c.req.header("x-forwarded-host") || c.req.header("host") ||
     "localhost";
   const proto = c.req.header("x-forwarded-proto") || "http";
   const uri = c.req.header("x-forwarded-uri") || c.req.url || "/";
-  return `${proto}://${host}${uri}`;
+  const url = new URL(uri, `${proto}://${host}`);
+  url.searchParams.delete(sso.tokenName);
+  return url.toString();
 }
 
 function parseBasicAuthHeader(
