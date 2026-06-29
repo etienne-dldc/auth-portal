@@ -1,7 +1,7 @@
 {
   "name": "@dldc/auth-portal",
   "exports": "./main.tsx",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "tasks": {
     "bump": "deno run -A jsr:@mys/bump@1",
     "deps:outdated": "deno outdated",
