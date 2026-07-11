@@ -28,6 +28,9 @@ export const check = createPathHandler(ROUTES.check.path)(
 
     if (basicAuthCredentials) {
       const { username, password } = basicAuthCredentials;
+      if (!System.get().isAllowed(successtUrl, username)) {
+        return c.text("Forbidden", 403);
+      }
       const isValid = await System.get().verifyBasicAuth(username, password);
       if (isValid) {
         return allowConnection(c, username);
@@ -48,12 +51,18 @@ export const check = createPathHandler(ROUTES.check.path)(
       // Check was hit with a valid SSO token, remove the SSO session and return a redirect with session cookie set
       // Since we are returning a non-200 response, this redirect will be forwarded to the client, and the client will follow the redirect and set the session cookie
       db.ssoSessions.removeById(ssoSession.id);
+      if (!System.get().isAllowed(successtUrl, linkedSession.username)) {
+        return c.redirect(ssoRedirect);
+      }
       await SessionTokenCookie.get().write(c, linkedSession.token);
       return c.redirect(successtUrl);
     }
 
     // Session come from the authentication middleware, so no need to check if it's valid, just check if it exists
     if (session) {
+      if (!System.get().isAllowed(successtUrl, session.username)) {
+        return c.redirect(ssoRedirect);
+      }
       // Session is valid, return 200 to allow the connection
       return allowConnection(c, session.username);
     }

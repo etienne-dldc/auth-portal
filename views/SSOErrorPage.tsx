@@ -1,4 +1,6 @@
-import { css, Link, Paper } from "@dldc/hono-ui";
+import { ButtonLink, css, Icon, Paper } from "@dldc/hono-ui";
+import type { FC } from "@hono/hono/jsx";
+import { ArrowLeft } from "lucide-static";
 import { Layout } from "../components/Layout.tsx";
 
 export type SSOError =
@@ -38,31 +40,36 @@ const messageClass = css({
   lineHeight: 1.5,
 });
 
-const linkClass = css({
-  color: "blue-400",
-  textDecoration: "none",
-  transition: "opacity 140ms ease",
-  selectors: {
-    "&:hover": {
-      opacity: 0.8,
-    },
+const errorMessages: Record<SSOError, { title: string; message: string }> = {
+  MissingRedirect: {
+    title: "Missing Redirect",
+    message:
+      "No redirect URL was provided. Please try accessing your application again.",
   },
-});
+  NotAllowed: {
+    title: "Access Denied",
+    message:
+      "You do not have access to this application, or it does not exist. If you believe this is an error, please contact your administrator.",
+  },
+};
 
-export function SSOErrorPage(
-  { error, returnPath = "/", returnLabel = "Back" }: SSOErrorPageProps,
-) {
+export const SSOErrorPage: FC<SSOErrorPageProps> = ({
+  error,
+  returnPath = "/",
+  returnLabel = "Back",
+}) => {
+  const { title, message } = errorMessages[error];
   return (
-    <Layout>
-      <Link href={returnPath}>
-        <span class={linkClass}>← {returnLabel}</span>
-      </Link>
+    <Layout title={title}>
+      <ButtonLink href={returnPath} variant="ghost">
+        <Icon icon={ArrowLeft} /> {returnLabel}
+      </ButtonLink>
       <Paper classList={containerClass}>
         <div class={headerClass}>
-          <h2 class={titleClass}>{error}</h2>
+          <h2 class={titleClass}>{title}</h2>
         </div>
-        <p class={messageClass}>{error}</p>
+        <p class={messageClass}>{message}</p>
       </Paper>
     </Layout>
   );
-}
+};
