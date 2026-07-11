@@ -25,7 +25,7 @@ export const RedirectPage = ({ redirectUrl }: RedirectPageProps) => {
         </Typography>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.location.href = "${redirectUrl}";`,
+            __html: `window.location.href = ${JSON.stringify(redirectUrl)};`,
           }}
         />
       </Paper>

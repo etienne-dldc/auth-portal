@@ -8,7 +8,7 @@ export function create(sessionId: string) {
     schema.tables.ssoSessions.insert({
       sessionId,
       expiresAt: Temporal.Now.instant().add({
-        seconds: Config.get().oauth.sessionDurationSeconds,
+        seconds: Config.get().sso.sessionDurationSeconds,
       }),
     }),
   );

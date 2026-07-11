@@ -14,7 +14,7 @@ export const RawRedirectPage = ({ redirectUrl }: RawRedirectPageProps) => {
         <p>Redirecting...</p>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.location.href = "${redirectUrl}";`,
+            __html: `window.location.href = ${JSON.stringify(redirectUrl)};`,
           }}
         />
       </body>

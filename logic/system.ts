@@ -1,4 +1,4 @@
-import { verify } from "@felix/argon2";
+import { hash, verify } from "@felix/argon2";
 import { parse } from "@std/yaml";
 import * as v from "@valibot/valibot";
 import { Config } from "./config/config.ts";
@@ -8,6 +8,7 @@ import {
   type TIdentityOAuth,
 } from "./identity.ts";
 import { mountable, type TMountResult } from "./mountable.ts";
+import { createLongToken } from "./database/utils.ts";
 
 const usernameSchema = v.pipe(
   v.string(),
@@ -258,6 +259,8 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
     allowedUsersByApp.set(app.origin, allowedUsers);
   });
 
+  const dummyHash = await hash(createLongToken());
+
   const systemInstance: TSystem = {
     resolveOAuthIdentity(
       identities: TIdentityOAuth[],
@@ -346,7 +349,8 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
     ): Promise<boolean> {
       const hashesSet = identitiesResolved.basic_auth_argon2.get(username);
       if (!hashesSet) {
-        return (false);
+        await verify(dummyHash, password);
+        return false;
       }
       for (const hash of hashesSet) {
         const isValid = await verify(hash, password);

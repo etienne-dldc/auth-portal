@@ -1,5 +1,5 @@
 import {
-  ButtonLink,
+  Button,
   css,
   cxClassList,
   Icon,
@@ -97,10 +97,12 @@ export const HomePage = ({ username }: HomePageProps) => {
         </Link>
       </Paper>
       <Stack>
-        <ButtonLink variant="danger" href={ROUTES.logout.link({})}>
-          <Icon icon={LogOut} />
-          Logout
-        </ButtonLink>
+        <form method="post" action={ROUTES.logout.link({})}>
+          <Button type="submit" variant="danger">
+            <Icon icon={LogOut} />
+            Logout
+          </Button>
+        </form>
       </Stack>
     </Layout>
   );

@@ -59,7 +59,7 @@ export function createServer() {
 
   app.get(ROUTES.home.path, ...home);
   app.get(ROUTES.login.path, ...login);
-  app.get(ROUTES.logout.path, ...logout);
+  app.post(ROUTES.logout.path, ...logout);
   app.get(ROUTES.sso.path, ...sso);
   app.get(ROUTES.check.path, ...check);
   app.get(ROUTES.basicAuthHelper.path, ...basicAuthHelper);
@@ -68,14 +68,10 @@ export function createServer() {
 
   app.onError((err, c) => {
     console.error(err);
-    const message = err instanceof Error
-      ? err.message
-      : "An unexpected error occurred";
-
     return c.html(
       <ErrorPage
         title="Error"
-        message={message}
+        message="An unexpected error occurred"
         returnPath="/"
         returnLabel="Back"
       />,

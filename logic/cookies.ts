@@ -10,7 +10,7 @@ export const SessionTokenCookie = mountable(() => {
       maxAge: session.durationSeconds,
       httpOnly: true,
       path: "/",
-      sameSite: secureCookies ? "None" : "Lax",
+      sameSite: "Lax",
       secure: secureCookies,
     }),
   };
@@ -23,7 +23,7 @@ export const OAuthSessionTokenCookie = mountable(() => {
       maxAge: oauth.sessionDurationSeconds,
       httpOnly: true,
       path: "/",
-      sameSite: secureCookies ? "None" : "Lax",
+      sameSite: "Lax",
       secure: secureCookies,
     }),
   };
@@ -36,7 +36,7 @@ export const SSORedirectCookie = mountable(() => {
       maxAge: sso.sessionDurationSeconds,
       httpOnly: true,
       path: "/",
-      sameSite: secureCookies ? "None" : "Lax",
+      sameSite: "Lax",
       secure: secureCookies,
     }),
   };

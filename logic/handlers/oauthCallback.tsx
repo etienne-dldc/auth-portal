@@ -1,6 +1,10 @@
 import { HTTPException } from "@hono/hono/http-exception";
 import { OAuthErrorPage } from "../../views/OAuthErrorPage.tsx";
-import { OAuthSessionTokenCookie, SessionTokenCookie, SSORedirectCookie } from "../cookies.ts";
+import {
+  OAuthSessionTokenCookie,
+  SessionTokenCookie,
+  SSORedirectCookie,
+} from "../cookies.ts";
 import * as db from "../database/actions.ts";
 import { createPathHandler } from "../factory.ts";
 import { getOAuthIdentities } from "../getOAuthIdentities.ts";
