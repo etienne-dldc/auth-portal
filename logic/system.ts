@@ -415,7 +415,14 @@ function getIdentityValues(
 ): TIdentity[] {
   const identities: TIdentity[] = [];
   // Support both new nested auth_methods and legacy flat fields
-  const methods = user.auth_methods ?? user;
+  const methods: v.InferOutput<typeof authMethodsSchema> = user.auth_methods ?? {
+    github_username: user.github_username,
+    discord_username: user.discord_username,
+    github_verified_email: user.github_verified_email,
+    google_verified_email: user.google_verified_email,
+    discord_verified_email: user.discord_verified_email,
+    basic_auth_argon2: user.basic_auth_argon2,
+  };
   if (methods.github_username) {
     identities.push({ kind: "github_username", value: methods.github_username });
   }
