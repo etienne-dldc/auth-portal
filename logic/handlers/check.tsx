@@ -41,18 +41,18 @@ export const check = createPathHandler(ROUTES.check.path)(
       const ssoSession = db.ssoSessions.findByToken(token);
       if (!isSessionValid(ssoSession)) {
         // Token is expired, try again
-        return c.redirect(ssoRedirect);
+        return authRedirect(c, ssoRedirect);
       }
       const linkedSession = db.sessions.findById(ssoSession.sessionId);
       if (!isSessionValid(linkedSession)) {
         // Linked session is invalid, try again
-        return c.redirect(ssoRedirect);
+        return authRedirect(c, ssoRedirect);
       }
       // Check was hit with a valid SSO token, remove the SSO session and return a redirect with session cookie set
       // Since we are returning a non-200 response, this redirect will be forwarded to the client, and the client will follow the redirect and set the session cookie
       db.ssoSessions.removeById(ssoSession.id);
       if (!System.get().isAllowed(successtUrl, linkedSession.username)) {
-        return c.redirect(ssoRedirect);
+        return authRedirect(c, ssoRedirect);
       }
       await SessionTokenCookie.get().write(c, linkedSession.token);
       return c.redirect(successtUrl);
@@ -61,14 +61,14 @@ export const check = createPathHandler(ROUTES.check.path)(
     // Session come from the authentication middleware, so no need to check if it's valid, just check if it exists
     if (session) {
       if (!System.get().isAllowed(successtUrl, session.username)) {
-        return c.redirect(ssoRedirect);
+        return authRedirect(c, ssoRedirect);
       }
       // Session is valid, return 200 to allow the connection
       return allowConnection(c, session.username);
     }
 
     // Redirect to sso (response will be forwarded to the client)
-    return c.redirect(ssoRedirect);
+    return authRedirect(c, ssoRedirect);
   },
 );
 
@@ -120,4 +120,46 @@ function allowConnection(c: Context, username: string) {
         .toString()}
     />,
   );
+}
+
+const BEHAVIOR_HEADER = "x-auth-portal-behavior";
+
+function isAjaxRequest(c: Context): boolean {
+  // Standard XHR header (jQuery, axios, etc.)
+  if (c.req.header("x-requested-with") === "XMLHttpRequest") {
+    return true;
+  }
+  // Accept header indicates JSON
+  const accept = c.req.header("accept");
+  if (accept?.includes("application/json")) {
+    return true;
+  }
+  // Fetch Metadata: navigations send "navigate", API calls send "cors" / "no-cors" / "same-origin"
+  const fetchMode = c.req.header("sec-fetch-mode");
+  if (fetchMode && fetchMode !== "navigate") {
+    return true;
+  }
+  return false;
+}
+
+function authRedirect(c: Context, ssoRedirect: URL): Response {
+  // Custom header can override the behavior in either direction (see README)
+  const behavior = c.req.header(BEHAVIOR_HEADER)?.toLowerCase();
+  if (behavior === "fail") {
+    return c.json(
+      { error: "unauthorized", loginUrl: ssoRedirect.toString() },
+      401,
+    );
+  }
+  if (behavior === "redirect") {
+    return c.redirect(ssoRedirect);
+  }
+  // No override: auto-detect AJAX requests
+  if (isAjaxRequest(c)) {
+    return c.json(
+      { error: "unauthorized", loginUrl: ssoRedirect.toString() },
+      401,
+    );
+  }
+  return c.redirect(ssoRedirect);
 }
