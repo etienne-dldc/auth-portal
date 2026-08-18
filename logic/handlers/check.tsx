@@ -106,6 +106,13 @@ function parseBasicAuthHeader(
 function allowConnection(c: Context, username: string) {
   // Set X-User header to the username of the session
   c.header("X-User", username);
+  const userInfo = System.get().getUserInfo(username);
+  if (userInfo.name) {
+    c.header("X-Name", userInfo.name);
+  }
+  if (userInfo.email) {
+    c.header("X-Email", userInfo.email);
+  }
   return c.render(
     // Return a page that will redirect the user to the home page if the user ever ends up on this page
     <RawRedirectPage
