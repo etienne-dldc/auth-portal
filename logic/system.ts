@@ -17,11 +17,25 @@ const usernameSchema = v.pipe(
   v.regex(/^[a-zA-Z0-9_-]+$/),
 );
 
-const userSchema = v.object({
+const authMethodsSchema = v.object({
   github_username: v.optional(v.string()),
   discord_username: v.optional(v.string()),
   github_verified_email: v.optional(v.string()),
   google_verified_email: v.optional(v.string()),
+  discord_verified_email: v.optional(v.string()),
+  basic_auth_argon2: v.optional(v.array(v.string())),
+});
+
+const userSchema = v.object({
+  name: v.optional(v.string()),
+  email: v.optional(v.pipe(v.string(), v.email())),
+  auth_methods: v.optional(authMethodsSchema),
+  // Legacy flat fields (kept for backwards compatibility)
+  github_username: v.optional(v.string()),
+  discord_username: v.optional(v.string()),
+  github_verified_email: v.optional(v.string()),
+  google_verified_email: v.optional(v.string()),
+  discord_verified_email: v.optional(v.string()),
   basic_auth_argon2: v.optional(v.array(v.string())),
 });
 
@@ -57,6 +71,11 @@ export interface TSystemApp {
   name?: string;
 }
 
+export interface TUserInfo {
+  name?: string;
+  email?: string;
+}
+
 export interface TSystem {
   /**
    * Given a list of identities, resolve the corresponding username.
@@ -70,6 +89,8 @@ export interface TSystem {
   verifyBasicAuth(username: string, password: string): Promise<boolean>;
 
   getAppsForUser(username: string): TSystemApp[];
+
+  getUserInfo(username: string): TUserInfo;
 }
 
 export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
@@ -372,6 +393,16 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
         return allowedUsers.has(username);
       }).map(({ origin, name }) => ({ origin, name }));
     },
+    getUserInfo(username: string): TUserInfo {
+      const user = system.users[username];
+      if (!user) {
+        return {};
+      }
+      return {
+        name: user.name,
+        email: user.email,
+      };
+    },
   };
 
   return {
@@ -383,26 +414,41 @@ function getIdentityValues(
   user: v.InferOutput<typeof userSchema>,
 ): TIdentity[] {
   const identities: TIdentity[] = [];
-  if (user.github_username) {
-    identities.push({ kind: "github_username", value: user.github_username });
+  // Support both new nested auth_methods and legacy flat fields
+  const methods: v.InferOutput<typeof authMethodsSchema> = user.auth_methods ?? {
+    github_username: user.github_username,
+    discord_username: user.discord_username,
+    github_verified_email: user.github_verified_email,
+    google_verified_email: user.google_verified_email,
+    discord_verified_email: user.discord_verified_email,
+    basic_auth_argon2: user.basic_auth_argon2,
+  };
+  if (methods.github_username) {
+    identities.push({ kind: "github_username", value: methods.github_username });
   }
-  if (user.discord_username) {
-    identities.push({ kind: "discord_username", value: user.discord_username });
+  if (methods.discord_username) {
+    identities.push({ kind: "discord_username", value: methods.discord_username });
   }
-  if (user.github_verified_email) {
+  if (methods.github_verified_email) {
     identities.push({
       kind: "github_verified_email",
-      value: user.github_verified_email,
+      value: methods.github_verified_email,
     });
   }
-  if (user.google_verified_email) {
+  if (methods.google_verified_email) {
     identities.push({
       kind: "google_verified_email",
-      value: user.google_verified_email,
+      value: methods.google_verified_email,
     });
   }
-  if (user.basic_auth_argon2) {
-    for (const hash of user.basic_auth_argon2) {
+  if (methods.discord_verified_email) {
+    identities.push({
+      kind: "discord_verified_email",
+      value: methods.discord_verified_email,
+    });
+  }
+  if (methods.basic_auth_argon2) {
+    for (const hash of methods.basic_auth_argon2) {
       identities.push({
         kind: "basic_auth_argon2",
         value: hash,
