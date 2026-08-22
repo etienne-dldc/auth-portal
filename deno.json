@@ -1,7 +1,7 @@
 {
   "name": "@dldc/auth-portal",
   "exports": "./main.tsx",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "tasks": {
     "bump": "deno run -A jsr:@mys/bump@1",
     "deps:outdated": "deno outdated",
@@ -22,6 +22,7 @@
     "@hono/hono": "jsr:@hono/hono@^4.12.26",
     "@hono/standard-validator": "jsr:@hono/standard-validator@^0.2.2",
     "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
+    "@panva/jose": "jsr:@panva/jose@^6.0.0",
     "@std/cli": "jsr:@std/cli@^1.0.30",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.7",
     "@std/expect": "jsr:@std/expect@^1.0.19",

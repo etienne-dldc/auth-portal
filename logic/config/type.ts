@@ -31,6 +31,18 @@ export interface TAppConfig {
     tokenName: string;
     sessionDurationSeconds: number;
   };
+  oidc: {
+    // Cookie name for persisting the authorization request across the login redirect
+    authRequestCookieName: string;
+    // How long the authorization request cookie is valid (seconds)
+    authRequestDurationSeconds: number;
+    // How long authorization codes are valid (seconds)
+    codeDurationSeconds: number;
+    // How long access tokens are valid (seconds)
+    accessTokenDurationSeconds: number;
+    // Signing key rotation interval (seconds) — 0 = never auto-rotate
+    keyRotationSeconds: number;
+  };
 }
 
 export type TFlatAppConfig = Flatten<{
@@ -54,5 +66,12 @@ export type TFlatAppConfig = Flatten<{
   sso: {
     tokenName: string;
     sessionDurationSeconds: number;
+  };
+  oidc: {
+    authRequestCookieName: string;
+    authRequestDurationSeconds: number;
+    codeDurationSeconds: number;
+    accessTokenDurationSeconds: number;
+    keyRotationSeconds: number;
   };
 }>;

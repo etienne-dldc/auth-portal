@@ -45,4 +45,9 @@ export const ROUTES = {
   sso: createRoute("/sso"),
   oauthCallback: createRoute("/oauth2/:providerName/callback"),
   oauthStart: createRoute("/oauth2/:providerName/start"),
+  oidcDiscovery: createRoute("/oidc/.well-known/openid-configuration"),
+  oidcJwks: createRoute("/oidc/jwks.json"),
+  oidcAuthorize: createRoute("/oidc/authorize"),
+  oidcToken: createRoute("/oidc/token"),
+  oidcUserinfo: createRoute("/oidc/userinfo"),
 };

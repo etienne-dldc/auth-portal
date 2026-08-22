@@ -41,3 +41,31 @@ export const SSORedirectCookie = mountable(() => {
     }),
   };
 });
+
+const oidcAuthRequestSchema = v.object({
+  clientId: v.string(),
+  redirectUri: v.string(),
+  responseType: v.string(),
+  scope: v.string(),
+  state: v.optional(v.string()),
+  nonce: v.optional(v.string()),
+  codeChallenge: v.optional(v.string()),
+  codeChallengeMethod: v.optional(v.string()),
+});
+
+export const OidcAuthRequestCookie = mountable(() => {
+  const { oidc, secureCookies } = Config.get();
+  return {
+    value: createTypedCookies(
+      oidc.authRequestCookieName,
+      oidcAuthRequestSchema,
+      {
+        maxAge: oidc.authRequestDurationSeconds,
+        httpOnly: true,
+        path: "/",
+        sameSite: "Lax",
+        secure: secureCookies,
+      },
+    ),
+  };
+});

@@ -58,10 +58,22 @@ const appsSchema = v.array(v.object({
   public: v.optional(v.boolean()),
 }));
 
+const oidcClientSchema = v.object({
+  client_id: v.pipe(v.string(), v.minLength(1)),
+  client_secret: v.optional(v.string()),
+  redirect_uris: v.pipe(v.array(v.pipe(v.string(), v.url())), v.minLength(1)),
+  allowed: v.optional(v.array(usernameSchema)),
+  public: v.optional(v.boolean()),
+  scopes: v.optional(v.array(v.string())),
+});
+
+const oidcClientsSchema = v.array(oidcClientSchema);
+
 const systemSchema = v.object({
   users: usersSchema,
   groups: v.optional(groupsSchema),
   apps: appsSchema,
+  oidc_clients: v.optional(oidcClientsSchema),
 });
 
 export type TSystemData = v.InferOutput<typeof systemSchema>;
@@ -74,6 +86,14 @@ export interface TSystemApp {
 export interface TUserInfo {
   name?: string;
   email?: string;
+}
+
+export interface TOidcClient {
+  clientId: string;
+  clientSecret?: string;
+  redirectUris: string[];
+  scopes: string[];
+  public: boolean;
 }
 
 export interface TSystem {
@@ -91,6 +111,12 @@ export interface TSystem {
   getAppsForUser(username: string): TSystemApp[];
 
   getUserInfo(username: string): TUserInfo;
+
+  /** Find an OIDC client by client_id. Returns null if not found. */
+  getOidcClient(clientId: string): TOidcClient | null;
+
+  /** Check if a user is allowed to use an OIDC client. Returns true for public clients. */
+  isOidcClientAllowed(clientId: string, username: string): boolean;
 }
 
 export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
@@ -191,6 +217,42 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
     }
   });
 
+  // Validate oidc_clients
+  const oidcClients = system.oidc_clients ?? [];
+
+  // client_id uniqueness
+  const oidcClientIdSet = new Set<string>();
+  oidcClients.forEach((client) => {
+    if (oidcClientIdSet.has(client.client_id)) {
+      throw new Error(
+        `Invalid config file: duplicate oidc client_id "${client.client_id}"`,
+      );
+    }
+    oidcClientIdSet.add(client.client_id);
+  });
+
+  // Each client must have either allowed or public
+  oidcClients.forEach((client) => {
+    if (!client.allowed && !client.public) {
+      throw new Error(
+        `Invalid config file: oidc client "${client.client_id}" must have either allowed users or be public`,
+      );
+    }
+  });
+
+  // allowed entries are valid usernames or group names
+  oidcClients.forEach((client) => {
+    if (client.allowed) {
+      client.allowed.forEach((entry) => {
+        if (!allEntities.has(entry)) {
+          throw new Error(
+            `Invalid config file: oidc client "${client.client_id}" has an allowed entry "${entry}" that does not correspond to a valid username or group name`,
+          );
+        }
+      });
+    }
+  });
+
   const identitiesResolved = {
     // github username -> username
     github_username: new Map<string, string>(),
@@ -278,6 +340,33 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
       });
     }
     allowedUsersByApp.set(app.origin, allowedUsers);
+  });
+
+  // oidc client_id -> Set of allowed usernames (groups expanded)
+  const allowedUsersByOidcClient = new Map<string, Set<string>>();
+  oidcClients.forEach((client) => {
+    const allowedUsers = new Set<string>();
+    if (client.allowed) {
+      client.allowed.forEach((entry) => {
+        if (resolvedGroups.has(entry)) {
+          resolvedGroups.get(entry)?.forEach((member) => {
+            allowedUsers.add(member);
+          });
+        } else {
+          allowedUsers.add(entry);
+        }
+      });
+    }
+    allowedUsersByOidcClient.set(client.client_id, allowedUsers);
+  });
+
+  // client_id -> client config (for fast lookup)
+  const oidcClientById = new Map<
+    string,
+    v.InferOutput<typeof oidcClientSchema>
+  >();
+  oidcClients.forEach((client) => {
+    oidcClientById.set(client.client_id, client);
   });
 
   const dummyHash = await hash(createLongToken());
@@ -402,6 +491,25 @@ export const System = mountable(async (): Promise<TMountResult<TSystem>> => {
         name: user.name,
         email: user.email,
       };
+    },
+    getOidcClient(clientId: string): TOidcClient | null {
+      const client = oidcClientById.get(clientId);
+      if (!client) return null;
+      return {
+        clientId: client.client_id,
+        clientSecret: client.client_secret,
+        redirectUris: client.redirect_uris,
+        scopes: client.scopes ?? ["openid", "profile", "email"],
+        public: client.public ?? false,
+      };
+    },
+    isOidcClientAllowed(clientId: string, username: string): boolean {
+      const client = oidcClientById.get(clientId);
+      if (!client) return false;
+      if (client.public) return true;
+      const allowed = allowedUsersByOidcClient.get(clientId);
+      if (!allowed) return false;
+      return allowed.has(username);
     },
   };
 

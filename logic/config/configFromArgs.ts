@@ -21,6 +21,11 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
       "oauth.session-duration-seconds",
       "oauth.cookie.name",
       "oauth.cookie.max-age",
+      "oidc.auth-request-cookie-name",
+      "oidc.auth-request-duration-seconds",
+      "oidc.code-duration-seconds",
+      "oidc.access-token-duration-seconds",
+      "oidc.key-rotation-seconds",
     ],
     alias: {
       c: "config-path",
@@ -70,6 +75,23 @@ export function configFromArgs(args: string[]): TFlatAppConfig {
     "oauth.sessionDurationSeconds": parseNumber(
       parsed.oauth?.["session-duration-seconds"],
       "oauth.session-duration-seconds",
+    ),
+    "oidc.authRequestCookieName": parsed.oidc?.["auth-request-cookie-name"],
+    "oidc.authRequestDurationSeconds": parseNumber(
+      parsed.oidc?.["auth-request-duration-seconds"],
+      "oidc.auth-request-duration-seconds",
+    ),
+    "oidc.codeDurationSeconds": parseNumber(
+      parsed.oidc?.["code-duration-seconds"],
+      "oidc.code-duration-seconds",
+    ),
+    "oidc.accessTokenDurationSeconds": parseNumber(
+      parsed.oidc?.["access-token-duration-seconds"],
+      "oidc.access-token-duration-seconds",
+    ),
+    "oidc.keyRotationSeconds": parseNumber(
+      parsed.oidc?.["key-rotation-seconds"],
+      "oidc.key-rotation-seconds",
     ),
   };
 }

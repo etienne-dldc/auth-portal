@@ -48,12 +48,18 @@ export function createTypedCookies<T>(
     name,
     async read(ctx: Context) {
       const value = await getCookieFn(ctx, name);
-      if (value === null) {
+      if (!value || typeof value !== "string") {
         return null;
       }
-      const parsed = v.safeParse(schema, value);
-      if (parsed.success) {
-        return parsed.output;
+      let parsedValue: unknown = value;
+      try {
+        parsedValue = JSON.parse(value);
+      } catch {
+        // Not JSON — use raw string value
+      }
+      const result = v.safeParse(schema, parsedValue);
+      if (result.success) {
+        return result.output;
       }
       return null;
     },
@@ -61,7 +67,10 @@ export function createTypedCookies<T>(
       if (value === null) {
         deleteCookieFn(ctx, name);
       } else {
-        await setCookieFn(ctx, name, String(value));
+        const strValue = typeof value === "string"
+          ? value
+          : JSON.stringify(value);
+        await setCookieFn(ctx, name, strValue);
       }
     },
     clear: (ctx: Context) => {

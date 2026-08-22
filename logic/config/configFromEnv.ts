@@ -27,6 +27,17 @@ export function configFromEnv(): TFlatAppConfig {
     ),
     "sso.tokenName": Deno.env.get("SSO_TOKEN_NAME"),
     "sso.sessionDurationSeconds": parseIntEnv("SSO_SESSION_DURATION_SECONDS"),
+    "oidc.authRequestCookieName": Deno.env.get(
+      "OIDC_AUTH_REQUEST_COOKIE_NAME",
+    ),
+    "oidc.authRequestDurationSeconds": parseIntEnv(
+      "OIDC_AUTH_REQUEST_DURATION_SECONDS",
+    ),
+    "oidc.codeDurationSeconds": parseIntEnv("OIDC_CODE_DURATION_SECONDS"),
+    "oidc.accessTokenDurationSeconds": parseIntEnv(
+      "OIDC_ACCESS_TOKEN_DURATION_SECONDS",
+    ),
+    "oidc.keyRotationSeconds": parseIntEnv("OIDC_KEY_ROTATION_SECONDS"),
   };
 }
 

@@ -73,6 +73,28 @@ export const Config = mountable(
           "sso.sessionDurationSeconds",
         ),
       },
+      oidc: {
+        authRequestCookieName: definedOrFail(
+          flatConfig,
+          "oidc.authRequestCookieName",
+        ),
+        authRequestDurationSeconds: definedOrFail(
+          flatConfig,
+          "oidc.authRequestDurationSeconds",
+        ),
+        codeDurationSeconds: definedOrFail(
+          flatConfig,
+          "oidc.codeDurationSeconds",
+        ),
+        accessTokenDurationSeconds: definedOrFail(
+          flatConfig,
+          "oidc.accessTokenDurationSeconds",
+        ),
+        keyRotationSeconds: definedOrFail(
+          flatConfig,
+          "oidc.keyRotationSeconds",
+        ),
+      },
     };
 
     return {

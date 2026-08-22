@@ -12,6 +12,11 @@ import { login } from "./handlers/login.tsx";
 import { logout } from "./handlers/logout.tsx";
 import { oauthCallback } from "./handlers/oauthCallback.tsx";
 import { oauthStart } from "./handlers/oauthStart.tsx";
+import { oidcAuthorize } from "./handlers/oidcAuthorize.tsx";
+import { oidcDiscovery } from "./handlers/oidcDiscovery.tsx";
+import { oidcJwks } from "./handlers/oidcJwks.tsx";
+import { oidcToken } from "./handlers/oidcToken.tsx";
+import { oidcUserinfo } from "./handlers/oidcUserinfo.tsx";
 import { sso } from "./handlers/sso.tsx";
 import { authentication } from "./middlewares/authentication.ts";
 import { ROUTES } from "./routes.ts";
@@ -65,6 +70,12 @@ export function createServer() {
   app.get(ROUTES.basicAuthHelper.path, ...basicAuthHelper);
   app.get(ROUTES.oauthStart.path, ...oauthStart);
   app.get(ROUTES.oauthCallback.path, ...oauthCallback);
+
+  app.get(ROUTES.oidcDiscovery.path, ...oidcDiscovery);
+  app.get(ROUTES.oidcJwks.path, ...oidcJwks);
+  app.get(ROUTES.oidcAuthorize.path, ...oidcAuthorize);
+  app.post(ROUTES.oidcToken.path, ...oidcToken);
+  app.get(ROUTES.oidcUserinfo.path, ...oidcUserinfo);
 
   app.onError((err, c) => {
     console.error(err);

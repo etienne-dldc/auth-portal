@@ -17,6 +17,8 @@
     "jsr:@hono/hono@^4.12.26": "4.12.26",
     "jsr:@hono/hono@^4.8.3": "4.12.26",
     "jsr:@hono/standard-validator@~0.2.2": "0.2.2",
+    "jsr:@panva/jose@*": "6.2.9",
+    "jsr:@panva/jose@6": "6.2.9",
     "jsr:@standard-schema/spec@1": "1.1.0",
     "jsr:@std/assert@^1.0.19": "1.0.19",
     "jsr:@std/cli@^1.0.30": "1.0.30",
@@ -115,6 +117,9 @@
         "jsr:@standard-schema/spec"
       ]
     },
+    "@panva/jose@6.2.9": {
+      "integrity": "721551334c01e272cec5034211d063ac5bd51adc17cf18f4cf0f79fdefd672a7"
+    },
     "@standard-schema/spec@1.1.0": {
       "integrity": "2ccd54513cd9c960bd155ab569b1a901bc99c6f9ad29559d3f38a28c91c1822d"
     },
@@ -209,6 +214,7 @@
       "jsr:@felix/argon2@^3.0.5",
       "jsr:@hono/hono@^4.12.26",
       "jsr:@hono/standard-validator@~0.2.2",
+      "jsr:@panva/jose@6",
       "jsr:@std/cli@^1.0.30",
       "jsr:@std/dotenv@~0.225.7",
       "jsr:@std/expect@^1.0.19",

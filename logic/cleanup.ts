@@ -6,6 +6,8 @@ export const Cleanup = mountable(() => {
     db.sessions.deteleExpired();
     db.oauthSessions.deteleExpired();
     db.ssoSessions.deteleExpired();
+    db.oidcCodes.deteleExpired();
+    db.oidcSigningKeys.deteleExpired();
   }, 5 * 60 * 1000);
 
   return {

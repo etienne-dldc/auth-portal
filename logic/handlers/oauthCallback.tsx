@@ -2,6 +2,7 @@ import { HTTPException } from "@hono/hono/http-exception";
 import { OAuthErrorPage } from "../../views/OAuthErrorPage.tsx";
 import {
   OAuthSessionTokenCookie,
+  OidcAuthRequestCookie,
   SessionTokenCookie,
   SSORedirectCookie,
 } from "../cookies.ts";
@@ -53,6 +54,11 @@ export const oauthCallback = createPathHandler(ROUTES.oauthCallback.path)(
       }
       const session = db.sessions.create(username);
       await SessionTokenCookie.get().write(c, session.token);
+      const oidcAuthRequest = await OidcAuthRequestCookie.get().read(c);
+      if (oidcAuthRequest) {
+        OidcAuthRequestCookie.get().clear(c);
+        return c.redirect(ROUTES.oidcAuthorize.path);
+      }
       const ssoRedirect = await SSORedirectCookie.get().read(c);
       if (ssoRedirect) {
         return c.redirect(ROUTES.sso.link({}));
