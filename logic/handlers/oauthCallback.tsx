@@ -57,7 +57,6 @@ export const oauthCallback = createPathHandler(ROUTES.oauthCallback.path)(
       await SessionTokenCookie.get().write(c, session.token);
       const oidcAuthRequest = await OidcAuthRequestCookie.get().read(c);
       if (oidcAuthRequest) {
-        OidcAuthRequestCookie.get().clear(c);
         return c.redirect(ROUTES.oidcAuthorize.path);
       }
       const ssoRedirect = await SSORedirectCookie.get().read(c);

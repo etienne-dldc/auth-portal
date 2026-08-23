@@ -9,7 +9,19 @@ import type { TOidcAuthorizationRequest } from "../oidc/types.ts";
 
 export const oidcAuthorize = createPathHandler(ROUTES.oidcAuthorize.path)(
   async (c) => {
-    const authRequest = parseAuthorizationRequest(c);
+    let authRequest = parseAuthorizationRequest(c);
+    if (!authRequest) {
+      const cookieAuthRequest = await OidcAuthRequestCookie.get().read(c);
+      if (cookieAuthRequest) {
+        authRequest = {
+          ...cookieAuthRequest,
+          codeChallengeMethod: cookieAuthRequest.codeChallengeMethod as
+            | "S256"
+            | "plain"
+            | undefined,
+        };
+      }
+    }
     if (!authRequest) {
       return c.html(<OidcErrorPage error="invalid_request" />, 400);
     }
@@ -46,6 +58,8 @@ export const oidcAuthorize = createPathHandler(ROUTES.oidcAuthorize.path)(
       });
       return c.redirect(ROUTES.login.path);
     }
+
+    OidcAuthRequestCookie.get().clear(c);
 
     if (
       !System.get().isOidcClientAllowed(authRequest.clientId, session.username)
