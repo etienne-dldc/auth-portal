@@ -40,8 +40,10 @@
     "jsr:@std/yaml@^1.1.1": "1.1.1",
     "jsr:@valibot/valibot@^1.4.1": "1.4.1",
     "npm:@opentelemetry/api@^1.9.1": "1.9.1",
+    "npm:@playwright/test@^1.50.0": "1.62.1",
     "npm:lucide-static@^1.21.0": "1.21.0",
     "npm:nanoid@^5.1.16": "5.1.16",
+    "npm:playwright@*": "1.62.1",
     "npm:regexparam@3": "3.0.0",
     "npm:type-fest@^5.6.0": "5.7.0",
     "npm:type-fest@^5.7.0": "5.7.0"
@@ -183,11 +185,37 @@
     "@opentelemetry/api@1.9.1": {
       "integrity": "sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q=="
     },
+    "@playwright/test@1.62.1": {
+      "integrity": "sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ==",
+      "dependencies": [
+        "playwright"
+      ],
+      "bin": true
+    },
+    "fsevents@2.3.2": {
+      "integrity": "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==",
+      "os": ["darwin"],
+      "scripts": true
+    },
     "lucide-static@1.21.0": {
       "integrity": "sha512-6248z2/4sEyKkYAPPUYxOPiB2RCfMmLdMHuoOhsTFnoD40ixAoHmTVhOPux8ADa1NTBmzpEKF7WNePm+Ms503Q=="
     },
     "nanoid@5.1.16": {
       "integrity": "sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==",
+      "bin": true
+    },
+    "playwright-core@1.62.1": {
+      "integrity": "sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==",
+      "bin": true
+    },
+    "playwright@1.62.1": {
+      "integrity": "sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==",
+      "dependencies": [
+        "playwright-core"
+      ],
+      "optionalDependencies": [
+        "fsevents"
+      ],
       "bin": true
     },
     "regexparam@3.0.0": {
@@ -223,6 +251,7 @@
       "jsr:@std/yaml@^1.1.1",
       "jsr:@valibot/valibot@^1.4.1",
       "npm:@opentelemetry/api@^1.9.1",
+      "npm:@playwright/test@^1.50.0",
       "npm:lucide-static@^1.21.0",
       "npm:nanoid@^5.1.16",
       "npm:regexparam@3",

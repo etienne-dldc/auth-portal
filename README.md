@@ -25,34 +25,37 @@ YAML config file.
 
 ### Environment variables
 
-| Variable                             | Default                         | Description                                                                     |
-| ------------------------------------ | ------------------------------- | ------------------------------------------------------------------------------- |
-| `ORIGIN`                             | — (required)                    | The public origin of the auth-portal instance (e.g. `https://auth.example.com`) |
-| `CONFIG_PATH`                        | `/data/config.yaml`             | Path to the YAML config file                                                    |
-| `DATABASE_PATH`                      | `/data/db.sqlite`               | Path to the SQLite database                                                     |
-| `SECURE_COOKIES`                     | `true`                          | Whether cookies should be `Secure` (set to `false` for local dev over HTTP)     |
-| `PORT`                               | `3000`                          | Port to listen on                                                               |
-| `OTEL_DENO`                          | `false`                         | Enable OpenTelemetry for Deno runtime                                           |
-| `SESSION_COOKIE_NAME`                | `auth_portal_v1`                | Session cookie name                                                             |
-| `SESSION_SESSION_DURATION_SECONDS`   | `604800` (7 days)               | Session lifetime                                                                |
-| `OAUTH_SESSION_KEY_COOKIE_NAME`      | `auth_portal_oauth_session_key` | OAuth flow cookie name                                                          |
-| `OAUTH_SESSION_DURATION_SECONDS`     | `300` (5 min)                   | OAuth flow timeout                                                              |
-| `OAUTH_GITHUB_ENABLED`               | `false`                         | Enable GitHub OAuth                                                             |
-| `OAUTH_GITHUB_CLIENT_ID`             | —                               | GitHub OAuth client ID                                                          |
-| `OAUTH_GITHUB_CLIENT_SECRET`         | —                               | GitHub OAuth client secret                                                      |
-| `OAUTH_GOOGLE_ENABLED`               | `false`                         | Enable Google OAuth                                                             |
-| `OAUTH_GOOGLE_CLIENT_ID`             | —                               | Google OAuth client ID                                                          |
-| `OAUTH_GOOGLE_CLIENT_SECRET`         | —                               | Google OAuth client secret                                                      |
-| `OAUTH_DISCORD_ENABLED`              | `false`                         | Enable Discord OAuth                                                            |
-| `OAUTH_DISCORD_CLIENT_ID`            | —                               | Discord OAuth client ID                                                         |
-| `OAUTH_DISCORD_CLIENT_SECRET`        | —                               | Discord OAuth client secret                                                     |
-| `SSO_TOKEN_NAME`                     | `auth-portal-sso-token`         | Query parameter name for SSO tokens                                             |
-| `SSO_SESSION_DURATION_SECONDS`       | `60` (1 min)                    | SSO session lifetime                                                            |
-| `OIDC_AUTH_REQUEST_COOKIE_NAME`      | `auth_portal_oidc_req_v1`       | OIDC auth request cookie name                                                   |
-| `OIDC_AUTH_REQUEST_DURATION_SECONDS` | `300` (5 min)                   | How long the OIDC auth request cookie is valid                                  |
-| `OIDC_CODE_DURATION_SECONDS`         | `60` (1 min)                    | Authorization code lifetime                                                     |
-| `OIDC_ACCESS_TOKEN_DURATION_SECONDS` | `3600` (1 hour)                 | Access token lifetime                                                           |
-| `OIDC_KEY_ROTATION_SECONDS`          | `7776000` (90 days)             | Signing key rotation interval                                                   |
+| Variable                             | Default                                       | Description                                                                     |
+| ------------------------------------ | --------------------------------------------- | ------------------------------------------------------------------------------- |
+| `ORIGIN`                             | — (required)                                  | The public origin of the auth-portal instance (e.g. `https://auth.example.com`) |
+| `CONFIG_PATH`                        | `/data/config.yaml`                           | Path to the YAML config file                                                    |
+| `DATABASE_PATH`                      | `/data/db.sqlite`                             | Path to the SQLite database                                                     |
+| `SECURE_COOKIES`                     | `true`                                        | Whether cookies should be `Secure` (set to `false` for local dev over HTTP)     |
+| `PORT`                               | `3000`                                        | Port to listen on                                                               |
+| `OTEL_DENO`                          | `false`                                       | Enable OpenTelemetry for Deno runtime                                           |
+| `SESSION_COOKIE_NAME`                | `auth_portal_v1`                              | Session cookie name                                                             |
+| `SESSION_SESSION_DURATION_SECONDS`   | `604800` (7 days)                             | Session lifetime                                                                |
+| `OAUTH_SESSION_KEY_COOKIE_NAME`      | `auth_portal_oauth_session_key`               | OAuth flow cookie name                                                          |
+| `OAUTH_SESSION_DURATION_SECONDS`     | `300` (5 min)                                 | OAuth flow timeout                                                              |
+| `OAUTH_GITHUB_ENABLED`               | `false`                                       | Enable GitHub OAuth                                                             |
+| `OAUTH_GITHUB_CLIENT_ID`             | —                                             | GitHub OAuth client ID                                                          |
+| `OAUTH_GITHUB_CLIENT_SECRET`         | —                                             | GitHub OAuth client secret                                                      |
+| `OAUTH_GITHUB_API_URL`               | `https://api.github.com`                      | GitHub API base URL (for testing)                                               |
+| `OAUTH_GITHUB_AUTHORIZE_URL`         | `https://github.com/login/oauth/authorize`    | GitHub OAuth authorize URL (for testing)                                        |
+| `OAUTH_GITHUB_TOKEN_URL`             | `https://github.com/login/oauth/access_token` | GitHub OAuth token URL (for testing)                                            |
+| `OAUTH_GOOGLE_ENABLED`               | `false`                                       | Enable Google OAuth                                                             |
+| `OAUTH_GOOGLE_CLIENT_ID`             | —                                             | Google OAuth client ID                                                          |
+| `OAUTH_GOOGLE_CLIENT_SECRET`         | —                                             | Google OAuth client secret                                                      |
+| `OAUTH_DISCORD_ENABLED`              | `false`                                       | Enable Discord OAuth                                                            |
+| `OAUTH_DISCORD_CLIENT_ID`            | —                                             | Discord OAuth client ID                                                         |
+| `OAUTH_DISCORD_CLIENT_SECRET`        | —                                             | Discord OAuth client secret                                                     |
+| `SSO_TOKEN_NAME`                     | `auth-portal-sso-token`                       | Query parameter name for SSO tokens                                             |
+| `SSO_SESSION_DURATION_SECONDS`       | `60` (1 min)                                  | SSO session lifetime                                                            |
+| `OIDC_AUTH_REQUEST_COOKIE_NAME`      | `auth_portal_oidc_req_v1`                     | OIDC auth request cookie name                                                   |
+| `OIDC_AUTH_REQUEST_DURATION_SECONDS` | `300` (5 min)                                 | How long the OIDC auth request cookie is valid                                  |
+| `OIDC_CODE_DURATION_SECONDS`         | `60` (1 min)                                  | Authorization code lifetime                                                     |
+| `OIDC_ACCESS_TOKEN_DURATION_SECONDS` | `3600` (1 hour)                               | Access token lifetime                                                           |
+| `OIDC_KEY_ROTATION_SECONDS`          | `7776000` (90 days)                           | Signing key rotation interval                                                   |
 
 ### YAML config file
 

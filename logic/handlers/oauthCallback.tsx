@@ -1,3 +1,4 @@
+import { OAuth2ResponseError } from "@cmd-johnson/oauth2-client";
 import { HTTPException } from "@hono/hono/http-exception";
 import { OAuthErrorPage } from "../../views/OAuthErrorPage.tsx";
 import {
@@ -65,7 +66,11 @@ export const oauthCallback = createPathHandler(ROUTES.oauthCallback.path)(
       }
       return c.redirect(ROUTES.home.link({}));
     } catch (err) {
-      console.error(err);
+      if (err instanceof OAuth2ResponseError) {
+        console.error(`OAuth error: ${err.error}`);
+      } else {
+        console.error(err);
+      }
       return c.render(<OAuthErrorPage errorKey="UnexpectedOAuthError" />);
     }
   },

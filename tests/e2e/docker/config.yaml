@@ -1,0 +1,21 @@
+users:
+  testuser:
+    name: Test User
+    email: test@example.com
+    auth_methods:
+      github_username: testuser
+      github_verified_email: test@example.com
+      basic_auth_argon2:
+        - "$argon2id$v=19$m=4096,t=3,p=1$dPK6jxedWWDlaWx6vVZCz5Rf4pre+GmaPPs$sK0htOoFdpj21nKj3fwEJMZdf1R4H2mxTj4WQXVbGU4"
+  unauthuser:
+    name: Unauthorized User
+    email: unauth@example.com
+    auth_methods:
+      basic_auth_argon2:
+        - "$argon2id$v=19$m=4096,t=3,p=1$JxtSsaSSzUw$sMMdySDNVAdzL/Q72SnJah7VZ30sfSFs4GjPypoqYpQ"
+
+apps:
+  - name: "Protected App"
+    origin: "http://app.localhost"
+    allowed:
+      - testuser

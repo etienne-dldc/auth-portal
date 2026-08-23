@@ -63,8 +63,8 @@ export const OAuth = mountable(() => {
     return new OAuth2Client({
       clientId: config.oauth.github.clientId,
       clientSecret: config.oauth.github.clientSecret,
-      authorizationEndpointUri: "https://github.com/login/oauth/authorize",
-      tokenUri: "https://github.com/login/oauth/access_token",
+      authorizationEndpointUri: config.oauth.github.authorizeUrl,
+      tokenUri: config.oauth.github.tokenUrl,
       defaults: { scope: ["user:email"] },
       redirectUri: new URL(
         ROUTES.oauthCallback.link({ providerName: "github" }),

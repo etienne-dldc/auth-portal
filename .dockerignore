@@ -1,0 +1,8 @@
+.env.local
+.data/
+.git/
+.github/
+.vscode/
+tests/
+playwright.config.ts
+*.md

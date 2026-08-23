@@ -15,6 +15,9 @@ export const DEFAULT_CONFIG: TFlatAppConfig = {
   "oidc.keyRotationSeconds": 60 * 60 * 24 * 90, // 90 days
   "oauth.discord.enabled": false,
   "oauth.github.enabled": false,
+  "oauth.github.apiUrl": "https://api.github.com",
+  "oauth.github.authorizeUrl": "https://github.com/login/oauth/authorize",
+  "oauth.github.tokenUrl": "https://github.com/login/oauth/access_token",
   "oauth.google.enabled": false,
   "session.cookieName": "auth_portal_v1",
   "session.sessionDurationSeconds": 60 * 60 * 24 * 7, // 7 days

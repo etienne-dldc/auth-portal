@@ -1,0 +1,11 @@
+http://auth.localhost {
+	reverse_proxy auth-portal:3000
+}
+
+http://app.localhost {
+	forward_auth auth-portal:3000 {
+		uri /check
+		copy_headers X-User X-Name X-Email
+	}
+	reverse_proxy protected-service:80
+}

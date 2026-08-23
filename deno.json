@@ -2,6 +2,7 @@
   "name": "@dldc/auth-portal",
   "exports": "./main.tsx",
   "version": "0.7.0",
+  "nodeModulesDir": "auto",
   "tasks": {
     "bump": "deno run -A jsr:@mys/bump@1",
     "deps:outdated": "deno outdated",
@@ -9,7 +10,8 @@
     "check": "deno fmt --check . && deno lint . && deno check .",
     "start": "deno run --allow-all main.tsx",
     "dev": "deno run -A --watch main.tsx",
-    "test:run": "deno test -A"
+    "test:run": "deno test -A",
+    "e2e": "deno run -A npm:playwright test"
   },
   "imports": {
     "@cmd-johnson/oauth2-client": "jsr:@cmd-johnson/oauth2-client@^2.0.0",
@@ -23,6 +25,7 @@
     "@hono/standard-validator": "jsr:@hono/standard-validator@^0.2.2",
     "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
     "@panva/jose": "jsr:@panva/jose@^6.0.0",
+    "@playwright/test": "npm:@playwright/test@^1.50.0",
     "@std/cli": "jsr:@std/cli@^1.0.30",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.7",
     "@std/expect": "jsr:@std/expect@^1.0.19",
@@ -39,7 +42,11 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@hono/hono/jsx"
   },
+  "fmt": {
+    "exclude": ["playwright.config.ts", "tests/"]
+  },
   "lint": {
+    "exclude": ["playwright.config.ts", "tests/"],
     "rules": {
       "exclude": [
         "no-explicit-any"

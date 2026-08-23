@@ -1,5 +1,6 @@
 import type { Tokens } from "@cmd-johnson/oauth2-client";
 import * as v from "@valibot/valibot";
+import { Config } from "./config/config.ts";
 import type { TIdentityOAuth } from "./identity.ts";
 import type { TOAuthProviderName } from "./oauth.ts";
 
@@ -38,7 +39,8 @@ export async function getGithubIdentities(
     throw new Error("Invalid token type");
   }
   const accessToken = token.accessToken;
-  const userResponse = await fetch("https://api.github.com/user", {
+  const apiUrl = Config.get().oauth.github?.apiUrl ?? "https://api.github.com";
+  const userResponse = await fetch(`${apiUrl}/user`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!userResponse.ok) {
@@ -49,7 +51,7 @@ export async function getGithubIdentities(
   const user = v.parse(GitHubUserSchema, userData);
   const githubUsername = user.login;
 
-  const emailsResponse = await fetch("https://api.github.com/user/emails", {
+  const emailsResponse = await fetch(`${apiUrl}/user/emails`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!emailsResponse.ok) {

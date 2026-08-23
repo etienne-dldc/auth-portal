@@ -3,7 +3,7 @@ import { configFromArgs } from "./configFromArgs.ts";
 import { configFromEnv } from "./configFromEnv.ts";
 import { DEFAULT_CONFIG } from "./defaultConfig.ts";
 import { mergeConfig } from "./mergeConfig.ts";
-import type { TAppConfig, TConfigOAuth } from "./type.ts";
+import type { TAppConfig, TConfigGithubOAuth, TConfigOAuth } from "./type.ts";
 
 export const Config = mountable(
   (configOverride: Partial<TAppConfig> = {}): TMountResult<TAppConfig> => {
@@ -24,14 +24,18 @@ export const Config = mountable(
         }
         : null;
 
-    const github: TConfigOAuth = flatConfig["oauth.github.enabled"] !== false &&
+    const github: TConfigGithubOAuth | null =
+      flatConfig["oauth.github.enabled"] !== false &&
         (flatConfig["oauth.github.clientId"] &&
           flatConfig["oauth.github.clientSecret"])
-      ? {
-        clientId: definedOrFail(flatConfig, "oauth.github.clientId"),
-        clientSecret: definedOrFail(flatConfig, "oauth.github.clientSecret"),
-      }
-      : null;
+        ? {
+          clientId: definedOrFail(flatConfig, "oauth.github.clientId"),
+          clientSecret: definedOrFail(flatConfig, "oauth.github.clientSecret"),
+          apiUrl: definedOrFail(flatConfig, "oauth.github.apiUrl"),
+          authorizeUrl: definedOrFail(flatConfig, "oauth.github.authorizeUrl"),
+          tokenUrl: definedOrFail(flatConfig, "oauth.github.tokenUrl"),
+        }
+        : null;
 
     const google: TConfigOAuth = flatConfig["oauth.google.enabled"] !== false &&
         (flatConfig["oauth.google.clientId"] &&

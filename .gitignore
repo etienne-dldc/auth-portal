@@ -62,3 +62,8 @@ Temporary Items
 !.data/.gitkeep
 
 .env.local
+
+# Playwright
+test-results/
+playwright-report/
+node_modules

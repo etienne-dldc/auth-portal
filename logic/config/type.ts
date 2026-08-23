@@ -5,6 +5,14 @@ export type TConfigOAuth = {
   clientSecret: string;
 } | null;
 
+export interface TConfigGithubOAuth {
+  clientId: string;
+  clientSecret: string;
+  apiUrl: string;
+  authorizeUrl: string;
+  tokenUrl: string;
+}
+
 export interface TAppConfig {
   port: number;
   origin: string;
@@ -23,7 +31,7 @@ export interface TAppConfig {
     cookieName: string;
     // How long does the user has to complete the oauth flow
     sessionDurationSeconds: number;
-    github: TConfigOAuth;
+    github: TConfigGithubOAuth | null;
     discord: TConfigOAuth;
     google: TConfigOAuth;
   };
@@ -59,7 +67,14 @@ export type TFlatAppConfig = Flatten<{
   oauth: {
     cookieName: string;
     sessionDurationSeconds: number;
-    github: { enabled: boolean; clientId: string; clientSecret: string };
+    github: {
+      enabled: boolean;
+      clientId: string;
+      clientSecret: string;
+      apiUrl: string;
+      authorizeUrl: string;
+      tokenUrl: string;
+    };
     discord: { enabled: boolean; clientId: string; clientSecret: string };
     google: { enabled: boolean; clientId: string; clientSecret: string };
   };

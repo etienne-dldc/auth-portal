@@ -1,0 +1,53 @@
+services:
+  auth-portal:
+    build:
+      context: ../../..
+      dockerfile: Dockerfile
+    environment:
+      ORIGIN: http://auth.localhost
+      SECURE_COOKIES: "false"
+      CONFIG_PATH: /data/config.yaml
+      DATABASE_PATH: /data/db.sqlite
+      OAUTH_GITHUB_ENABLED: "true"
+      OAUTH_GITHUB_CLIENT_ID: test-client-id
+      OAUTH_GITHUB_CLIENT_SECRET: test-client-secret
+      OAUTH_GITHUB_API_URL: http://mock-github:9876
+      OAUTH_GITHUB_AUTHORIZE_URL: http://mock-github:9876/login/oauth/authorize
+      OAUTH_GITHUB_TOKEN_URL: http://mock-github:9876/login/oauth/access_token
+    volumes:
+      - ./config.yaml:/data/config.yaml:ro
+      - auth-portal-data:/data
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mock-github
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - auth-portal
+      - protected-service
+    restart: unless-stopped
+
+  protected-service:
+    image: nginx:alpine
+    volumes:
+      - ./protected-service:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+  mock-github:
+    image: node:22-alpine
+    command: ["node", "/app/server.mjs"]
+    volumes:
+      - ./mock-github:/app:ro
+    ports:
+      - "9876:9876"
+    restart: unless-stopped
+
+volumes:
+  auth-portal-data:
