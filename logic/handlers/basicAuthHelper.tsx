@@ -13,15 +13,17 @@ export const basicAuthHelper = createPathHandler(
     }
 
     const token = c.req.query("token");
+    const username = c.req.query("username") ?? session.username;
     if (token) {
       const argon2Hash = await hash(token);
-      const basicAuth = `Basic ${btoa(`${session.username}:${token}`)}`;
+      const basicAuth = `Basic ${btoa(`${username}:${token}`)}`;
 
       return c.render(
         <BasicAuthHelperPage
           argon2Hash={argon2Hash}
           basicAuth={basicAuth}
           token={token}
+          username={username}
         />,
       );
     }

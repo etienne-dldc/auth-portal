@@ -18,10 +18,11 @@ interface BasicAuthHelperPageProps {
   argon2Hash?: string;
   basicAuth?: string;
   token?: string;
+  username?: string;
 }
 
 export const BasicAuthHelperPage = (
-  { argon2Hash, basicAuth, token }: BasicAuthHelperPageProps,
+  { argon2Hash, basicAuth, token, username }: BasicAuthHelperPageProps,
 ) => {
   return (
     <Layout title="Apps">
@@ -39,6 +40,12 @@ export const BasicAuthHelperPage = (
         <Typography fontSize="3xl" render="h1">Basic Auth Helper</Typography>
         <form method="get" action={ROUTES.basicAuthHelper.link({})}>
           <InlineGroup>
+            <Input
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              value={username}
+            />
             <Input
               id="token"
               name="token"
